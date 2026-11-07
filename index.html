@@ -1,3 +1,4 @@
+<!-- BOX 2: PASTE THIS WHOLE FILE INTO index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,12 +25,12 @@
     <div id="playerView" style="display: none;">
         <div class="player-header">
             <button onclick="closeGameFrame()" class="back-btn">⬅️ Exit Game</button>
-            <h2 id="game-title">Playing: Monke Driver 2D</h2>
+            <h2 id="game-title">Playing: Yellow Truck 3D Obby Course</h2>
         </div>
-        <div class="frame-wrapper" id="canvas-holder" style="background: #111; position: relative; display: flex; justify-content: center; align-items: center;">
-            <canvas id="gameCanvas" width="800" height="450" style="border: 2px solid #333; max-width: 100%; max-height: 100%;"></canvas>
+        <div class="frame-wrapper" id="canvas-holder" style="background: #87CEEB; position: relative; display: flex; justify-content: center; align-items: center;">
+            <canvas id="obbyCanvas" width="800" height="450" style="border: 2px solid #333; max-width: 100%; max-height: 100%;"></canvas>
         </div>
-        <p style="text-align: center; color: #b5b7b9; margin-top: 10px;">Use LEFT and RIGHT ARROWS or A and D to dodge the red blocks!</p>
+        <p style="text-align: center; color: #b5b7b9; margin-top: 10px;">Use LEFT/RIGHT or A/D to steer, UP/DOWN or W/S to move! Reach the Green Pad!</p>
     </div>
 
     <!-- The Main Dashboard Hub Layout -->
@@ -43,15 +44,15 @@
             <h3 class="section-title">Recommended For You</h3>
             <div class="game-grid" id="arcadeGrid">
                 
-                <!-- Game Card 1: Launches our internal unblockable game -->
-                <div class="game-card" onclick="launchInternalGame()" data-title="drive mad monke driver">
+                <!-- Game Card 1 -->
+                <div class="game-card" onclick="launchInternalGame()" data-title="drive mad yellow truck 3d obby course">
                     <div class="thumbnail" style="background: linear-gradient(135deg, #ff9900, #ff5733);">
                         <span class="emoji-art">🚗</span>
                     </div>
                     <div class="card-info">
-                        <h4>Monke Driver 2D</h4>
+                        <h4>Yellow Truck 3D Obby</h4>
                         <p class="creator">by Platform Originals</p>
-                        <div class="stats">👍 98% • 👤 Active Now</div>
+                        <div class="stats">👍 99% • 👤 Active Now</div>
                     </div>
                 </div>
 
@@ -71,153 +72,7 @@
         <button onclick="deactivatePanicButton()" style="position: fixed; bottom: 10px; right: 10px; background: transparent; border: none; color: #dadce0; cursor: pointer; font-size: 0.75rem;">Exit View</button>
     </div>
 
-    <script>
-        const hubView = document.getElementById('hubView');
-        const playerView = document.getElementById('playerView');
-        const searchInput = document.getElementById('platformSearch');
-        const cards = document.querySelectorAll('.game-card');
-        const panicScreen = document.getElementById('panicScreen');
-        
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-
-        let playerX, obstacles, score, gameActive, animationId;
-        let keys = { ArrowLeft: false, ArrowRight: false, a: false, d: false };
-
-        function launchInternalGame() {
-            hubView.style.display = 'none';
-            playerView.style.display = 'block';
-            
-            playerX = canvas.width / 2;
-            obstacles = [];
-            score = 0;
-            gameActive = true;
-
-            window.addEventListener('keydown', handleKeyDown);
-            window.addEventListener('keyup', handleKeyUp);
-            
-            spawnObstacles();
-            gameLoop();
-        }
-
-        function handleKeyDown(e) {
-            if (e.key in keys) keys[e.key] = true;
-            if (e.key === 'Escape') activatePanicButton();
-        }
-
-        function handleKeyUp(e) {
-            if (e.key in keys) keys[e.key] = false;
-        }
-
-        function spawnObstacles() {
-            if (!gameActive) return;
-            let size = Math.random() * 25 + 20;
-            obstacles.push({
-                x: Math.random() * (canvas.width - size),
-                y: -size,
-                size: size,
-                speed: Math.random() * 3 + 3 + (score * 0.2)
-            });
-            setTimeout(spawnObstacles, 1000);
-        }
-
-        function gameLoop() {
-            if (!gameActive) return;
-            animationId = requestAnimationFrame(gameLoop);
-
-            ctx.fillStyle = "#222";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            ctx.fillStyle = "#2e7d32";
-            ctx.fillRect(0, 0, 30, canvas.height);
-            ctx.fillRect(canvas.width - 30, 0, 30, canvas.height);
-
-            if (keys.ArrowLeft || keys.a) playerX -= 6;
-            if (keys.ArrowRight || keys.d) playerX += 6;
-
-            if (playerX < 40) playerX = 40;
-            if (playerX > canvas.width - 70) playerX = canvas.width - 70;
-
-            ctx.fillStyle = "#ffcc00"; 
-            ctx.fillRect(playerX, canvas.height - 60, 30, 40);
-            ctx.fillStyle = "#111"; 
-            ctx.fillRect(playerX + 5, canvas.height - 75, 20, 15);
-            ctx.fillStyle = "#000"; 
-            ctx.fillRect(playerX - 5, canvas.height - 55, 10, 15);
-            ctx.fillRect(playerX + 25, canvas.height - 55, 10, 15);
-            ctx.fillRect(playerX - 5, canvas.height - 35, 10, 15);
-            ctx.fillRect(playerX + 25, canvas.height - 35, 10, 15);
-
-            for (let i = obstacles.length - 1; i >= 0; i--) {
-                let obs = obstacles[i];
-                obs.y += obs.speed;
-
-                ctx.fillStyle = "#ff3333";
-                ctx.fillRect(obs.x, obs.y, obs.size, obs.size);
-
-                if (
-                    playerX - 5 < obs.x + obs.size &&
-                    playerX + 35 > obs.x &&
-                    canvas.height - 75 < obs.y + obs.size &&
-                    canvas.height - 20 > obs.y
-                ) {
-                    gameActive = false;
-                    gameOverScreen();
-                }
-
-                if (obs.y > canvas.height) {
-                    obstacles.splice(i, 1);
-                    score += 1;
-                }
-            }
-
-            ctx.fillStyle = "#fff";
-            ctx.font = "20px Arial";
-            ctx.fillText("Score: " + score, 50, 40);
-        }
-
-        function gameOverScreen() {
-            ctx.fillStyle = "rgba(0,0,0,0.75)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#ff3333";
-            ctx.font = "bold 40px Arial";
-            ctx.textAlign = "center";
-            ctx.fillText("CRASHED!", canvas.width / 2, canvas.height / 2 - 20);
-            ctx.fillStyle = "#fff";
-            ctx.font = "20px Arial";
-            ctx.fillText("Final Score: " + score, canvas.width / 2, canvas.height / 2 + 20);
-            ctx.font = "16px Arial";
-            ctx.fillText("Press 'Exit Game' and click card to restart!", canvas.width / 2, canvas.height / 2 + 60);
-            ctx.textAlign = "left"; 
-        }
-
-        function closeGameFrame() {
-            gameActive = false;
-            cancelAnimationFrame(animationId);
-            window.removeEventListener('keydown', handleKeyDown);
-            window.removeEventListener('keyup', handleKeyUp);
-            playerView.style.display = 'none';
-            hubView.style.display = 'block';
-        }
-
-        function activatePanicButton() {
-            closeGameFrame();
-            panicScreen.style.display = 'block';
-            document.title = "Google Docs - Working Assignment Document";
-        }
-
-        function deactivatePanicButton() {
-            panicScreen.style.display = 'none';
-            document.title = "MONKE PLATFORM - Play & Explore";
-        }
-
-        searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            cards.forEach(card => {
-                const title = card.getAttribute('data-title');
-                card.style.display = title.includes(query) ? 'block' : 'none';
-            });
-        });
-    </script>
+    <!-- Links up your new game script file perfectly -->
+    <script src="game.js"></script>
 </body>
 </html>
