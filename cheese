@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MONKE PLATFORM - Play & Explore</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top Platform Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo" onclick="location.reload()" style="cursor: pointer;">🐒 MONKE.IO</div>
+        <div class="search-container">
+            <input type="text" id="platformSearch" placeholder="Search experiences...">
+        </div>
+        <div class="user-status">
+            <span class="avatar-icon">👤</span>
+            <span class="username">Guest_Monke</span>
+        </div>
+    </nav>
+
+    <!-- The Main Hub (Dashboard Grid) -->
+    <div id="hubView">
+        <div class="hero-banner">
+            <h2>Discover Experiences</h2>
+            <p>Join millions of players across endless unblocked worlds</p>
+        </div>
+
+        <main class="container">
+            <h3 class="section-title">Recommended For You</h3>
+            <div class="game-grid" id="arcadeGrid">
+                
+                <!-- Game Card 1: Open in a fresh unblocked tab -->
+                <div class="game-card" onclick="window.open('https://github.io', '_blank')" data-title="drive mad">
+                    <div class="thumbnail" style="background: linear-gradient(135deg, #ff9900, #ff5733);">
+                        <span class="emoji-art">🚗</span>
+                    </div>
+                    <div class="card-info">
+                        <h4>Drive Mad</h4>
+                        <p class="creator">by Martin Magni</p>
+                        <div class="stats">👍 94% • 👤 12K</div>
+                    </div>
+                </div>
+
+                <!-- Game Card 2: Open in a fresh unblocked tab -->
+                <div class="game-card" onclick="window.open('https://github.io', '_blank')" data-title="undead invasion">
+                    <div class="thumbnail" style="background: linear-gradient(135deg, #2e7d32, #1b5e20);">
+                        <span class="emoji-art">🧟</span>
+                    </div>
+                    <div class="card-info">
+                        <h4>Undead Invasion</h4>
+                        <p class="creator">by Arcade Labs</p>
+                        <div class="stats">👍 89% • 👤 4K</div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('platformSearch');
+        const cards = document.querySelectorAll('.game-card');
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            cards.forEach(card => {
+                const title = card.getAttribute('data-title');
+                card.style.display = title.includes(query) ? 'block' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>
