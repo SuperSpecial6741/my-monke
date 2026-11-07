@@ -30,7 +30,7 @@
             <h3 class="section-title">Recommended For You</h3>
             <div class="game-grid" id="arcadeGrid">
                 
-                <!-- Game Card 1: Open in a fresh unblocked tab -->
+                <!-- Game Card 1: Open Drive Mad Directly in a New Tab -->
                 <div class="game-card" onclick="window.open('https://github.io', '_blank')" data-title="drive mad">
                     <div class="thumbnail" style="background: linear-gradient(135deg, #ff9900, #ff5733);">
                         <span class="emoji-art">🚗</span>
@@ -42,7 +42,7 @@
                     </div>
                 </div>
 
-                <!-- Game Card 2: Open in a fresh unblocked tab -->
+                <!-- Game Card 2: Open Undead Invasion Directly in a New Tab -->
                 <div class="game-card" onclick="window.open('https://github.io', '_blank')" data-title="undead invasion">
                     <div class="thumbnail" style="background: linear-gradient(135deg, #2e7d32, #1b5e20);">
                         <span class="emoji-art">🧟</span>
@@ -58,6 +58,7 @@
         </main>
     </div>
 
+    <!-- Script for Live Search Filtering -->
     <script>
         const searchInput = document.getElementById('platformSearch');
         const cards = document.querySelectorAll('.game-card');
@@ -72,3 +73,4 @@
     </script>
 </body>
 </html>
+
