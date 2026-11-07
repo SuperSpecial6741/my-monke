@@ -13,23 +13,32 @@
     </header>
 
     <div class="frame-wrapper">
-        <iframe id="arcade-stream" src="" allowfullscreen></iframe>
+        <iframe 
+            id="arcade-stream" 
+            src="" 
+            allowfullscreen
+            allow="autoplay; gamepad; keyboard"
+            scrolling="no">
+        </iframe>
     </div>
 
     <script>
-        // Database linking URLs to your game files or embed links
+        // Directly loaded bypass configurations 
         const gameLibrary = {
             "drive-mad": {
                 title: "Drive Mad",
-                url: "https://gamedistribution.com" // Example distributor link
+                url: "https://ubg77.github.io/game131022/drive-mad/" 
             },
             "undead-invasion": {
                 title: "Undead Invasion",
-                url: "https://gamedistribution.com" 
+                url: "https://github.io" 
+            },
+            "puzzle": {
+                title: "Retro Puzzle Arena",
+                url: "./puzzle-game/index.html" 
             }
         };
 
-        // Extract game name from URL parameter (e.g., play.html?game=drive-mad)
         const urlParams = new URLSearchParams(window.location.search);
         const gameKey = urlParams.get('game');
 
