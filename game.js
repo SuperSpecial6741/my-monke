@@ -62,6 +62,8 @@ function setupLevel(level) {
             type = "ramp"; 
         } else if (z >= 180 && z <= 220 && level > 5) {
             type = "pit"; 
+        } else if (z === 300 || z === 310) {
+            type = "boost"; // Nitro pad right before the loop
         } else if (z >= 320 && z <= 360) {
             type = "loop"; 
         }
@@ -116,6 +118,17 @@ function renderRealistic3DBlock(x, yOffset, z, width, height, color, type = "roa
         return;
     }
 
+    if (type === "boost") {
+        ctx.fillStyle = "#00b0ff"; // Bright neon blue boost color
+        ctx.fillRect(screenX - w / 2, screenY - h, w, h);
+        ctx.fillStyle = "#ffffff";
+        ctx.font = `bold ${Math.floor(12 * scale / 30)}px Arial`;
+        ctx.textAlign = "center";
+        ctx.fillText("⚡ NITRO ⚡", screenX, screenY - h/3);
+        ctx.textAlign = "left";
+        return;
+    }
+
     if (type === "loop") {
         ctx.fillStyle = "rgba(0, 116, 217, 0.4)";
         ctx.strokeStyle = "#00ffcc";
@@ -148,12 +161,10 @@ function gameLoop() {
     let currentSegmentIndex = Math.floor(pZ / 10);
     let currentSeg = trackSegments[currentSegmentIndex] || { type: "road" };
 
-    // SOLID GROUND PHYSICS PROTECTION
     if (pY > 0 || currentSeg.type === "pit") {
         pYSpeed -= 0.12; 
         pY += pYSpeed;
 
-        // Snap truck cleanly to road deck to stop clipping under the map
         if (pY < 0 && currentSeg.type !== "pit") {
             pY = 0;
             pYSpeed = 0;
@@ -171,14 +182,18 @@ function gameLoop() {
         pY += pYSpeed;
     }
 
+    // Nitro pad engine injection trigger
+    if (currentSeg.type === "boost") {
+        pSpeed += 0.45; // Grants massive immediate acceleration force
+    }
+
     if (currentSeg.type === "loop") {
-        if (pSpeed < 3.8) {
-            // Keep vehicle locked exactly on top of the road surface during crashes
+        if (pSpeed < 4.2) {
             pY = 0;
             pSpeed = 0;
             pYSpeed = 0;
             gameActive = false;
-            renderScreenOverlay("CRASHED!", "Not enough momentum to scale the loop-de-loop!", "#ff3333", true);
+            renderScreenOverlay("CRASHED!", "Not enough speed! Hold W over the Nitro Pad!", "#ff3333", true);
             return;
         }
         pY = Math.abs(Math.sin(pZ * 0.12)) * 8;
@@ -294,6 +309,6 @@ function activatePanicButton() {
 }
 
 function deactivatePanicButton() {
-    panicScreen.style.display = 'none';
-    document.title = "MONKE PLATFORM - Play & Explore";
+panicScreen.style.display = 'none';
+document.title = "MONKE PLATFORM - Play & Explore";
 }
