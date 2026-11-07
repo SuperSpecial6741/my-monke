@@ -1,13 +1,12 @@
 const hubView = document.getElementById('hubView');
 const playerView = document.getElementById('playerView');
-const searchInput = document.getElementById('platformSearch');
 const cards = document.querySelectorAll('.game-card');
 const panicScreen = document.getElementById('panicScreen');
 
 const canvas = document.getElementById('obbyCanvas');
 const ctx = canvas.getContext('2d');
 
-let animationId, gameActive, pX, pZ, pSpeed, obstacles, finishZ, levelTheme;
+let animationId, gameActive, pX, pY, pZ, pSpeed, pYSpeed, trackSegments, finishZ, levelTheme;
 let currentLevel = 1;
 const maxLevels = 20;
 
@@ -37,34 +36,37 @@ function launchInternalGame() {
 function setupLevel(level) {
     gameActive = true;
     pX = 0;
+    pY = 0; 
     pZ = 0;
     pSpeed = 0;
-    finishZ = 450; 
+    pYSpeed = 0; 
+    finishZ = 500; 
     
-    // Define 4 unique environments across the 20 levels
     if (level <= 5) {
-        levelTheme = { sky: "#87CEEB", road: "#3e4144", stripes: "#ffffff", obsColor: "#ff9900", name: "City Streets" };
+        levelTheme = { sky: "#87CEEB", road: "#3e4144", stripes: "#ffffff", name: "Stunt Beginner" };
     } else if (level <= 10) {
-        levelTheme = { sky: "#ffcc80", road: "#d7ccc8", stripes: "#8d6e63", obsColor: "#a1887f", name: "Desert Run" };
+        levelTheme = { sky: "#ffb74d", road: "#5d4037", stripes: "#ffd54f", name: "Canyon Jumper" };
     } else if (level <= 15) {
-        levelTheme = { sky: "#263238", road: "#1a1a1a", stripes: "#ff5722", obsColor: "#d84315", name: "Volcano Hazard" };
+        levelTheme = { sky: "#37474f", road: "#1a1a1a", stripes: "#ff3333", name: "Lava Pit Arena" };
     } else {
-        levelTheme = { sky: "#0d47a1", road: "#001f3f", stripes: "#0074d9", obsColor: "#00ffea", name: "Space Base" };
+        levelTheme = { sky: "#1a0033", road: "#001122", stripes: "#00ffcc", name: "Hyperspace Loop" };
     }
 
-    // Generate unique obstacles based on the level number
-    obstacles = [];
-    let obstacleCount = 5 + Math.floor(level * 0.5);
-    for (let i = 0; i < obstacleCount; i++) {
-        let typeRand = (i + level) % 3; // Swaps obstacle behaviors cleanly
-        obstacles.push({
-            x: Math.sin(i * 2) * 4,
-            z: 70 + (i * 50),
-            size: 3 + (i % 2),
-            rot: Math.random() * 5,
-            speed: (0.03 + (level * 0.005)),
-            type: typeRand // 0 = Static block, 1 = Left-right sweeper, 2 = Pulsing wall
-        });
+    trackSegments = [];
+    for (let z = 0; z <= finishZ + 40; z += 10) {
+        let type = "road"; 
+
+        if (z > 80 && z < 110) {
+            type = (level > 2) ? "pit" : "road"; 
+        } else if (z === 70 || z === 150 || z === 260) {
+            type = "ramp"; 
+        } else if (z >= 180 && z <= 220 && level > 5) {
+            type = "pit"; 
+        } else if (z >= 320 && z <= 360) {
+            type = "loop"; 
+        }
+
+        trackSegments.push({ z: z, type: type });
     }
 
     window.removeEventListener('keydown', handleKeyDown);
@@ -85,35 +87,49 @@ function handleKeyUp(e) {
     if (e.key in keys) keys[e.key] = false;
 }
 
-// Upgraded 3D Projector with height offset support and lighting shading panels
-function renderRealistic3DBlock(x, yOffset, z, width, height, length, color, drawStripes = false) {
+function renderRealistic3DBlock(x, yOffset, z, width, height, color, type = "road") {
     let relativeZ = z - pZ;
-    if (relativeZ <= 4) return; 
+    if (relativeZ <= -20) return; 
 
-    let scale = 320 / relativeZ; 
+    let camHeightOffset = 3.5;
+    let camBackDistance = -12;
+    let targetZ = relativeZ - camBackDistance;
+    if (targetZ <= 1) return;
+
+    let scale = 350 / targetZ; 
     let screenX = (canvas.width / 2) + (x - pX) * scale;
-    let screenY = (canvas.height / 2) + (2.5 + yOffset) * scale; 
+    let screenY = (canvas.height / 2) + (camHeightOffset + yOffset - pY) * scale; 
 
     let w = width * scale;
     let h = height * scale;
 
-    // Ambient drop shadow simulation underneath objects
-    ctx.fillStyle = "rgba(0,0,0,0.15)";
-    ctx.fillRect(screenX - w/2, screenY, w, h * 0.1);
+    if (type === "pit") return; 
 
-    // Front structural face paint
-    ctx.fillStyle = color;
-    ctx.fillRect(screenX - w / 2, screenY - h, w, h);
-    
-    // Draw track divider stripes if requested
-    if (drawStripes) {
-        ctx.fillStyle = levelTheme.stripes;
-        ctx.fillRect(screenX - (w * 0.04), screenY - h, w * 0.08, h);
+    if (type === "ramp") {
+        ctx.fillStyle = "#ff5722";
+        ctx.beginPath();
+        ctx.moveTo(screenX - w/2, screenY);
+        ctx.lineTo(screenX + w/2, screenY);
+        ctx.lineTo(screenX, screenY - h * 2.5);
+        ctx.closePath();
+        ctx.fill();
+        return;
     }
 
-    // Outer grid detailing definitions
-    ctx.strokeStyle = "rgba(0,0,0,0.2)";
-    ctx.lineWidth = 1;
+    if (type === "loop") {
+        ctx.fillStyle = "rgba(0, 116, 217, 0.4)";
+        ctx.strokeStyle = "#00ffcc";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(screenX, screenY - scale * 3.5, scale * 4.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        return;
+    }
+
+    ctx.fillStyle = color;
+    ctx.fillRect(screenX - w / 2, screenY - h, w, h);
+    ctx.strokeStyle = "rgba(0,0,0,0.15)";
     ctx.strokeRect(screenX - w / 2, screenY - h, w, h);
 }
 
@@ -122,54 +138,91 @@ function gameLoop() {
     animationId = requestAnimationFrame(gameLoop);
 
     if (keys.w || keys.ArrowUp) pSpeed += 0.22;
-    if (keys.s || keys.ArrowDown) pSpeed -= 0.16;
-    if (keys.a || keys.ArrowLeft) pX -= 0.2;
-    if (keys.d || keys.ArrowRight) pX += 0.2;
+    if (keys.s || keys.ArrowDown) pSpeed -= 0.15;
+    if (keys.a || keys.ArrowLeft) pX -= 0.20;
+    if (keys.d || keys.ArrowRight) pX += 0.20;
 
-    pSpeed *= 0.92; 
+    pSpeed *= 0.94; 
     pZ += pSpeed;
 
-    if (Math.abs(pX) > 8.5) {
+    let currentSegmentIndex = Math.floor(pZ / 10);
+    let currentSeg = trackSegments[currentSegmentIndex] || { type: "road" };
+
+    if (pY > 0 || currentSeg.type === "pit") {
+        pYSpeed -= 0.12; 
+        pY += pYSpeed;
+
+        if (pY < -12) {
+            gameActive = false;
+            renderScreenOverlay("WASTED! 💥", "You plunged straight into the void pit!", "#ff3333", true);
+            return;
+        }
+    }
+
+    if (currentSeg.type === "ramp" && pY <= 0) {
+        pYSpeed = 2.8 + (pSpeed * 0.35); 
+        pY += pYSpeed;
+    }
+
+    if (currentSeg.type === "loop") {
+        if (pSpeed < 3.5) {
+            gameActive = false;
+            renderScreenOverlay("CRASHED!", "Not enough momentum to scale the loop-de-loop!", "#ff3333", true);
+            return;
+        }
+        pY = Math.abs(Math.sin(pZ * 0.12)) * 8;
+    }
+
+    if (pY < 0 && currentSeg.type !== "pit") {
+        pY = 0;
+        pYSpeed = 0;
+    }
+
+    if (Math.abs(pX) > 8.5 && pY <= 0.1) {
         gameActive = false;
-        renderScreenOverlay("GAME OVER", `Fell off on Level ${currentLevel}!`, "#ff3333", true);
+        renderScreenOverlay("GAME OVER", `Clipped the guardrails on Stage ${currentLevel}!`, "#ff3333", true);
         return;
     }
 
-    // 1. Draw Sky Background
     ctx.fillStyle = levelTheme.sky;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // 2. Draw Track segments with center lines
-    for (let z = 0; z < finishZ + 80; z += 15) {
-        if (z - pZ > 200) continue; // Performance distance view culling
-        renderRealistic3DBlock(0, 0, z, 17, 0.4, 15, levelTheme.road, (Math.floor(z/15) % 2 === 0));
+    trackSegments.forEach(seg => {
+        if (seg.z - pZ > 240 || seg.z - pZ < -40) return; 
+        renderRealistic3DBlock(0, 0, seg.z, 16, 0.4, levelTheme.road, seg.type);
+    });
+
+    renderRealistic3DBlock(0, -0.1, finishZ, 16, 0.6, "#00ff66");
+
+    let truckScale = 350 / 12; 
+    let tX = canvas.width / 2;
+    let tY = (canvas.height / 2) + (3.5 + 0.4) * truckScale; 
+
+    ctx.save();
+    if (currentSeg.type === "loop") {
+        ctx.translate(tX, tY - 30);
+        ctx.rotate(pZ * 0.12);
+        ctx.translate(-tX, -(tY - 30));
     }
 
-    // 3. Draw Green Finish Checkpoint Pad
-    renderRealistic3DBlock(0, -0.1, finishZ, 17, 0.6, 12, "#00ff66");
+    ctx.fillStyle = "#ffcc00";
+    ctx.fillRect(tX - 25, tY - 45, 50, 25);
+    ctx.fillStyle = "#cca600"; 
+    ctx.fillRect(tX - 25, tY - 20, 50, 8);
+    
+    ctx.fillStyle = "#111111"; 
+    ctx.fillRect(tX - 18, tY - 65, 36, 20);
+    ctx.fillStyle = "#ffcc00"; 
+    ctx.fillRect(tX - 20, tY - 68, 40, 4);
 
-    // 4. Update and Render Unique Obstacles
-    obstacles.forEach(obs => {
-        obs.rot += obs.speed;
-        let finalX = obs.x;
-        let finalH = obs.size;
+    ctx.fillStyle = "#1e1e1e";
+    ctx.fillRect(tX - 34, tY - 25, 12, 26); 
+    ctx.fillRect(tX + 22, tY - 25, 12, 26); 
 
-        if (obs.type === 1) {
-            // Left-Right moving obstacle pathing
-            finalX = obs.x + Math.sin(obs.rot) * 5;
-        } else if (obs.type === 2) {
-            // Pulsing wall sizing scale mechanics
-            finalH = obs.size + Math.abs(Math.sin(obs.rot)) * 3;
-        }
-
-        renderRealistic3DBlock(finalX, -0.4, obs.z, obs.size, finalH, obs.size, levelTheme.obsColor);
-
-        // Check for collision hit boxes
-        if (Math.abs(pZ - obs.z) < 4.5 && Math.abs(pX - finalX) < (obs.size / 2 + 1.4)) {
-            gameActive = false;
-            renderScreenOverlay("CRASHED!", `Wrecked on Level ${currentLevel}!`, "#ff3333", true);
-        }
-    });
+    ctx.fillStyle = "#b0bec5";
+    ctx.fillRect(tX - 32, tY - 16, 8, 8);
+    ctx.fillRect(tX + 24, tY - 16, 8, 8);
+    ctx.restore();
 
     if (pZ >= finishZ) {
         gameActive = false;
@@ -178,47 +231,26 @@ function gameLoop() {
         updateWalletDisplay();
 
         if (currentLevel < maxLevels) {
-            renderScreenOverlay("LEVEL CLEARED! 🎉", `Earned +50 MonkeBucks! Loading Level ${currentLevel + 1}...`, "#00ff66", false);
+            renderScreenOverlay("STUNT COMPLETED! 🏁", `Earned +50 MB! Next track loading...`, "#00ff66", false);
             currentLevel += 1;
             setTimeout(() => { setupLevel(currentLevel); }, 2200);
         } else {
-            renderScreenOverlay("OBBY MASTER! 🏆", `You beat all 20 Levels! Total Wallet: ${monkeBucks} MB`, "#ffd700", true);
+            renderScreenOverlay("OBBY CHAMPION! 👑", `20-Stage Gauntlet Beat! Final Balance: ${monkeBucks} MB`, "#ffd700", true);
             currentLevel = 1; 
         }
         return;
     }
 
-    // 5. DRAW REALISTIC TRUCK (Cockpit HUD View Dashboard Elements)
-    // Draw the yellow truck engine hood sticking out front
-    ctx.fillStyle = "#cca600"; // Darker base yellow shade shadow
-    ctx.fillRect(240, 360, 320, 90);
-    ctx.fillStyle = "#ffcc00"; // Main yellow truck paint hood panel
-    ctx.fillRect(260, 370, 280, 80);
-    
-    // Realistic Truck Front Details (Grill and Black Air Intake)
-    ctx.fillStyle = "#222"; 
-    ctx.fillRect(320, 395, 160, 30);
-    ctx.fillStyle = "#fff"; // Left Headlight
-    ctx.fillRect(280, 395, 30, 20);
-    ctx.fillStyle = "#fff"; // Right Headlight
-    ctx.fillRect(490, 395, 30, 20);
-
-    // Dark interior dash windshield outline rim frame
-    ctx.fillStyle = "rgba(17,17,17,0.95)";
-    ctx.fillRect(0, 420, canvas.width, 30); // Lower dash panel board
-    ctx.fillRect(0, 0, 40, canvas.height);    // Left window column border post
-    ctx.fillRect(canvas.width - 40, 0, 40, canvas.height); // Right window column border post
-
-    // Head-Up Display text print panels
     ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 16px Courier New";
-    ctx.fillText(`ZONE: ${levelTheme.name}`, 60, 40);
-    ctx.fillText(`STAGE: ${currentLevel} / ${maxLevels}`, 60, 65);
-    ctx.fillText("DISTANCE: " + Math.min(100, Math.floor((pZ / finishZ) * 100)) + "%", 60, 90);
+    ctx.font = "bold 15px Courier New";
+    ctx.fillText(`OBBY AREA: ${levelTheme.name}`, 45, 40);
+    ctx.fillText(`COURSE   : Stage ${currentLevel} / ${maxLevels}`, 45, 65);
+    ctx.fillText(`VELOCITY : ${Math.floor(Math.abs(pSpeed) * 38)} MPH`, 45, 90);
+    ctx.fillText(`ALTITUDE : ${Math.floor(pY * 5)} FT`, 45, 115);
 }
 
 function renderScreenOverlay(title, msg, col, showRestartText) {
-    ctx.fillStyle = "rgba(15, 17, 19, 0.9)";
+    ctx.fillStyle = "rgba(15, 17, 19, 0.92)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = col;
     ctx.font = "bold 45px Arial";
@@ -230,7 +262,7 @@ function renderScreenOverlay(title, msg, col, showRestartText) {
     
     if (showRestartText) {
         ctx.fillStyle = "#00b0ff";
-        ctx.fillText("Press 'Exit Game' and click card to restart this level!", canvas.width / 2, canvas.height / 2 + 65);
+        ctx.fillText("Press 'Exit Game' and click card to restart this stage!", canvas.width / 2, canvas.height / 2 + 65);
     }
     ctx.textAlign = "left"; 
 }
@@ -254,11 +286,3 @@ function deactivatePanicButton() {
     panicScreen.style.display = 'none';
     document.title = "MONKE PLATFORM - Play & Explore";
 }
-
-searchInput.addEventListener('input', (e) => {
-    const query = e.target.value.toLowerCase();
-    cards.forEach(card => {
-        const title = card.getAttribute('data-title');
-        card.style.display = title.includes(query) ? 'block' : 'none';
-    });
-});
