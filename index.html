@@ -9,7 +9,7 @@
 <body>
     <!-- Top Platform Navigation Bar -->
     <nav class="navbar">
-        <div class="logo" id="homeLogo" style="cursor: pointer;">🐒 MONKE.IO</div>
+        <div class="logo" onclick="location.reload()" style="cursor: pointer;">🐒 MONKE.IO</div>
         <div class="search-container">
             <input type="text" id="platformSearch" placeholder="Search experiences...">
         </div>
@@ -30,65 +30,39 @@
             <h3 class="section-title">Recommended For You</h3>
             <div class="game-grid" id="arcadeGrid">
                 
-                <!-- Game Card 1: Drive Mad -->
-                <div class="game-card" onclick="launchGame('Drive Mad', 'https://github.io')" data-title="drive mad">
-<!-- Game Card 1: Drive Mad -->
-<div class="game-card" onclick="window.open('https://github.io', '_blank')" data-title="drive mad">
-    <div class="thumbnail" style="background: linear-gradient(135deg, #ff9900, #ff5733);">
-        <span class="emoji-art">🚗</span>
-    </div>
-    <div class="card-info">
-        <h4>Drive Mad</h4>
-        <p class="creator">by Martin Magni</p>
-        <div class="stats">👍 94% • 👤 12K</div>
-    </div>
-</div>
+                <!-- Game Card 1: Absolute Link for Drive Mad -->
+                <a href="https://github.io" target="_blank" class="game-card" data-title="drive mad" style="text-decoration: none; display: block;">
+                    <div class="thumbnail" style="background: linear-gradient(135deg, #ff9900, #ff5733);">
+                        <span class="emoji-art">🚗</span>
+                    </div>
+                    <div class="card-info">
+                        <h4>Drive Mad</h4>
+                        <p class="creator">by Martin Magni</p>
+                        <div class="stats">👍 94% • 👤 12K</div>
+                    </div>
+                </a>
 
-<!-- Game Card 2: Undead Invasion -->
-<div class="game-card" onclick="window.open('https://github.io', '_blank')" data-title="undead invasion">
-    <div class="thumbnail" style="background: linear-gradient(135deg, #2e7d32, #1b5e20);">
-        <span class="emoji-art">🧟</span>
-    </div>
-    <div class="card-info">
-        <h4>Undead Invasion</h4>
-        <p class="creator">by Arcade Labs</p>
-        <div class="stats">👍 89% • 👤 4K</div>
-    </div>
-</div>
-</div>
+                <!-- Game Card 2: Absolute Link for Undead Invasion -->
+                <a href="https://github.io" target="_blank" class="game-card" data-title="undead invasion" style="text-decoration: none; display: block;">
+                    <div class="thumbnail" style="background: linear-gradient(135deg, #2e7d32, #1b5e20);">
+                        <span class="emoji-art">🧟</span>
+                    </div>
+                    <div class="card-info">
+                        <h4>Undead Invasion</h4>
+                        <p class="creator">by Arcade Labs</p>
+                        <div class="stats">👍 89% • 👤 4K</div>
+                    </div>
+                </a>
 
             </div>
         </main>
     </div>
 
-    <!-- The Live Game Screen Player -->
-    <div id="playerView" style="display: none;">
-        <div class="player-header">
-            <button onclick="returnToHome()" class="back-btn">⬅️ Back to Home</button>
-            <h1 id="game-title">Loading...</h1>
-        </div>
-
-        <div class="frame-wrapper">
-            <iframe 
-                id="arcade-stream" 
-                src="" 
-                allowfullscreen
-                allow="autoplay; gamepad; keyboard"
-                scrolling="no">
-            </iframe>
-        </div>
-    </div>
-
-    <!-- Dynamic Interface Operations Script -->
+    <!-- Script for Live Search Filtering -->
     <script>
-        const hubView = document.getElementById('hubView');
-        const playerView = document.getElementById('playerView');
-        const gameTitle = document.getElementById('game-title');
-        const arcadeStream = document.getElementById('arcade-stream');
         const searchInput = document.getElementById('platformSearch');
         const cards = document.querySelectorAll('.game-card');
 
-        // Handle Active Live Searching Filtering
         searchInput.addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase();
             cards.forEach(card => {
@@ -96,23 +70,6 @@
                 card.style.display = title.includes(query) ? 'block' : 'none';
             });
         });
-
-        // Instant Direct Launch Function
-        function launchGame(title, url) {
-            hubView.style.display = 'none';
-            playerView.style.display = 'block';
-            gameTitle.innerText = title;
-            arcadeStream.src = url;
-        }
-
-        // Return Home Function
-        function returnToHome() {
-            playerView.style.display = 'none';
-            hubView.style.display = 'block';
-            arcadeStream.src = ''; 
-        }
-
-        document.getElementById('homeLogo').addEventListener('click', returnToHome);
     </script>
 </body>
 </html>
