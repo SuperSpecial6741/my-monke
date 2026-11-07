@@ -1,63 +1,178 @@
+:root {
+    --bg-color: #191b1d;
+    --nav-color: #25282a;
+    --card-color: #2b2e31;
+    --text-primary: #ffffff;
+    --text-secondary: #b5b7b9;
+    --accent-color: #00b0ff;
+}
+
 body {
     margin: 0;
-    background-color: #121212;
-    color: #ffffff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    user-select: none;
 }
 
-header {
-    background-color: #1e1e1e;
-    padding: 20px;
-    text-align: center;
-    border-bottom: 3px solid #333;
+/* Navbar Container Elements */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--nav-color);
+    padding: 10px 30px;
+    height: 45px;
+    border-bottom: 1px solid #383c40;
 }
 
-.game-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    padding: 40px;
+.logo {
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+}
+
+.search-container input {
+    width: 350px;
+    padding: 8px 15px;
+    background-color: #111214;
+    border: 1px solid #454b51;
+    border-radius: 6px;
+    color: white;
+    outline: none;
+}
+
+.user-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+}
+
+/* Main Display Framing */
+.hero-banner {
+    padding: 30px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
+.hero-banner h2 {
+    margin: 0 0 5px 0;
+    font-size: 2rem;
+}
+
+.hero-banner p {
+    margin: 0;
+    color: var(--text-secondary);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 30px;
+}
+
+.section-title {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: var(--text-secondary);
+}
+
+/* Response Adaptive App Grid */
+.game-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 15px;
+}
+
 .game-card {
-    background-color: #1e1e1e;
-    border-radius: 12px;
+    background-color: var(--card-color);
+    border-radius: 8px;
     overflow: hidden;
-    text-decoration: none;
-    color: white;
-    text-align: center;
-    transition: transform 0.2s;
-    border: 2px solid #333;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    border: 1px solid #383c40;
 }
 
 .game-card:hover {
-    transform: translateY(-5px);
-    border-color: #00ffcc;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    border-color: #555;
 }
 
 .thumbnail {
-    height: 150px;
+    height: 130px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3rem;
 }
 
-.game-card h3 {
-    margin: 15px 0;
+.emoji-art {
+    font-size: 3.5rem;
+}
+
+.card-info {
+    padding: 12px;
+}
+
+.card-info h4 {
+    margin: 0 0 4px 0;
+    font-size: 1rem;
+}
+
+.creator {
+    margin: 0 0 8px 0;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.stats {
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #00e676;
+}
+
+/* Play View Workspace Containers */
+.player-header {
+    max-width: 1024px;
+    margin: 20px auto 0 auto;
+    width: 95%;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.player-header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.back-btn {
+    background-color: var(--card-color);
+    border: 1px solid #454b51;
+    color: var(--accent-color);
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.back-btn:hover {
+    background-color: #333639;
 }
 
 .frame-wrapper {
     position: relative;
-    width: 90%;
-    max-width: 960px;
+    width: 95%;
+    max-width: 1024px;
     aspect-ratio: 16 / 9;
-    margin: 30px auto;
-    border: 4px solid #333;
+    margin: 15px auto;
+    border: 1px solid #383c40;
     border-radius: 8px;
     background-color: #000;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
     overflow: hidden;
 }
 
@@ -65,11 +180,4 @@ iframe {
     width: 100%;
     height: 100%;
     border: none;
-}
-
-.back-btn {
-    color: #00ffcc;
-    text-decoration: none;
-    float: left;
-    font-weight: bold;
 }
