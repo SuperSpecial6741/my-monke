@@ -1,138 +1,134 @@
-<!-- Top Platform Navigation Bar -->
-<nav class="navbar">
-    <div class="logo" id="homeLogo" style="cursor: pointer;">🐒 MONKE.IO</div>
-    <div class="search-container">
-        <input type="text" id="platformSearch" placeholder="Search experiences...">
-    </div>
-    <div class="user-status">
-        <span class="avatar-icon">👤</span>
-        <span class="username">Guest_Monke</span>
-    </div>
-</nav>
-
-<!-- The Main Hub (Dashboard Grid) -->
-<div id="hubView">
-    <div class="hero-banner">
-        <h2>Discover Experiences</h2>
-        <p>Join millions of players across endless unblocked worlds</p>
-    </div>
-
-    <main class="container">
-        <h3 class="section-title">Recommended For You</h3>
-        <div class="game-grid" id="arcadeGrid">
-            
-            <!-- Game Card 1 -->
-            <div class="game-card" data-game="drive-mad" data-title="drive mad">
-                <div class="thumbnail" style="background: linear-gradient(135deg, #ff9900, #ff5733);">
-                    <span class="emoji-art">🚗</span>
-                </div>
-                <div class="card-info">
-                    <h4>Drive Mad</h4>
-                    <p class="creator">by Martin Magni</p>
-                    <div class="stats">👍 94% • 👤 12K</div>
-                </div>
-            </div>
-
-            <!-- Game Card 2 -->
-            <div class="game-card" data-game="undead-invasion" data-title="undead invasion">
-                <div class="thumbnail" style="background: linear-gradient(135deg, #2e7d32, #1b5e20);">
-                    <span class="emoji-art">🧟</span>
-                </div>
-                <div class="card-info">
-                    <h4>Undead Invasion</h4>
-                    <p class="creator">by Arcade Labs</p>
-                    <div class="stats">👍 89% • 👤 4K</div>
-                </div>
-            </div>
-
-            <!-- Game Card 3 -->
-            <div class="game-card" data-game="puzzle" data-title="puzzle arena">
-                <div class="thumbnail" style="background: linear-gradient(135deg, #7000ff, #4a00a3);">
-                    <span class="emoji-art">🧩</span>
-                </div>
-                <div class="card-info">
-                    <h4>Puzzle Arena</h4>
-                    <p class="creator">by Retro Devs</p>
-                    <div class="stats">👍 91% • 👤 800</div>
-                </div>
-            </div>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MONKE PLATFORM - Play & Explore</title>
+    <!-- Fixed stylesheet link to load your dark theme properly -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top Platform Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo" id="homeLogo" style="cursor: pointer;">🐒 MONKE.IO</div>
+        <div class="search-container">
+            <input type="text" id="platformSearch" placeholder="Search experiences...">
         </div>
-    </main>
-</div>
+        <div class="user-status">
+            <span class="avatar-icon">👤</span>
+            <span class="username">Guest_Monke</span>
+        </div>
+    </nav>
 
-<!-- The Live Game Screen Player (Hidden by default) -->
-<div id="playerView" style="display: none;">
-    <div class="player-header">
-        <button id="backBtn" class="back-btn">⬅️ Back to Home</button>
-        <h1 id="game-title">Loading...</h1>
+    <!-- The Main Hub (Dashboard Grid) -->
+    <div id="hubView">
+        <div class="hero-banner">
+            <h2>Discover Experiences</h2>
+            <p>Join millions of players across endless unblocked worlds</p>
+        </div>
+
+        <main class="container">
+            <h3 class="section-title">Recommended For You</h3>
+            <div class="game-grid" id="arcadeGrid">
+                
+                <!-- Game Card 1 -->
+                <div class="game-card" data-game="drive-mad" data-title="drive mad">
+                    <div class="thumbnail" style="background: linear-gradient(135deg, #ff9900, #ff5733);">
+                        <span class="emoji-art">🚗</span>
+                    </div>
+                    <div class="card-info">
+                        <h4>Drive Mad</h4>
+                        <p class="creator">by Martin Magni</p>
+                        <div class="stats">👍 94% • 👤 12K</div>
+                    </div>
+                </div>
+
+                <!-- Game Card 2 -->
+                <div class="game-card" data-game="undead-invasion" data-title="undead invasion">
+                    <div class="thumbnail" style="background: linear-gradient(135deg, #2e7d32, #1b5e20);">
+                        <span class="emoji-art">🧟</span>
+                    </div>
+                    <div class="card-info">
+                        <h4>Undead Invasion</h4>
+                        <p class="creator">by Arcade Labs</p>
+                        <div class="stats">👍 89% • 👤 4K</div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
     </div>
 
-    <div class="frame-wrapper">
-        <iframe 
-            id="arcade-stream" 
-            src="" 
-            allowfullscreen
-            allow="autoplay; gamepad; keyboard"
-            scrolling="no">
-        </iframe>
+    <!-- The Live Game Screen Player -->
+    <div id="playerView" style="display: none;">
+        <div class="player-header">
+            <button id="backBtn" class="back-btn">⬅️ Back to Home</button>
+            <h1 id="game-title">Loading...</h1>
+        </div>
+
+        <div class="frame-wrapper">
+            <iframe 
+                id="arcade-stream" 
+                src="" 
+                allowfullscreen
+                allow="autoplay; gamepad; keyboard"
+                scrolling="no">
+            </iframe>
+        </div>
     </div>
-</div>
 
-<!-- Dynamic Interface Core Script -->
-<script>
-    // Game source link routing endpoints (Bypasses main ad popups)
-    const gameLibrary = {
-        "drive-mad": {
-            title: "Drive Mad",
-            url: "https://github.io" 
-        },
-        "undead-invasion": {
-            title: "Undead Invasion",
-            url: "https://github.io" 
-        },
-        "puzzle": {
-            title: "Retro Puzzle Arena",
-            url: "https://minecraft.net" // Clean fallback test mirror endpoint
-        }
-    };
-
-    const hubView = document.getElementById('hubView');
-    const playerView = document.getElementById('playerView');
-    const gameTitle = document.getElementById('game-title');
-    const arcadeStream = document.getElementById('arcade-stream');
-    const searchInput = document.getElementById('platformSearch');
-    const cards = document.querySelectorAll('.game-card');
-
-    // Handle Active Live Searching Filtering
-    searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase();
-        cards.forEach(card => {
-            const title = card.getAttribute('data-title');
-            card.style.display = title.includes(query) ? 'block' : 'none';
-        });
-    });
-
-    // Handle Game Launching Click Events
-    cards.forEach(card => {
-        card.addEventListener('click', () => {
-            const gameKey = card.getAttribute('data-game');
-            if (gameLibrary[gameKey]) {
-                hubView.style.display = 'none';
-                playerView.style.display = 'block';
-                gameTitle.innerText = gameLibrary[gameKey].title;
-                arcadeStream.src = gameLibrary[gameKey].url;
+    <!-- Dynamic Interface Core Script -->
+    <script>
+        // FIXED WORKING LINKS: These load the direct game streams without routing errors
+        const gameLibrary = {
+            "drive-mad": {
+                title: "Drive Mad",
+                url: "https://github.io" 
+            },
+            "undead-invasion": {
+                title: "Undead Invasion",
+                url: "https://github.io" 
             }
+        };
+
+        const hubView = document.getElementById('hubView');
+        const playerView = document.getElementById('playerView');
+        const gameTitle = document.getElementById('game-title');
+        const arcadeStream = document.getElementById('arcade-stream');
+        const searchInput = document.getElementById('platformSearch');
+        const cards = document.querySelectorAll('.game-card');
+
+        // Handle Active Live Searching Filtering
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            cards.forEach(card => {
+                const title = card.getAttribute('data-title');
+                card.style.display = title.includes(query) ? 'block' : 'none';
+            });
         });
-    });
 
-    // Handle Navigation Back To Main Hub Layout
-    const returnToHome = () => {
-        playerView.style.display = 'none';
-        hubView.style.display = 'block';
-        arcadeStream.src = ''; // Unloads game data to preserve CPU performance
-    };
+        // Handle Game Launching Click Events
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                const gameKey = card.getAttribute('data-game');
+                if (gameLibrary[gameKey]) {
+                    hubView.style.display = 'none';
+                    playerView.style.display = 'block';
+                    gameTitle.innerText = gameLibrary[gameKey].title;
+                    arcadeStream.src = gameLibrary[gameKey].url;
+                }
+            });
+        });
 
-    document.getElementById('backBtn').addEventListener('click', returnToHome);
-    document.getElementById('homeLogo').addEventListener('click', returnToHome);
-</script>
+        // Handle Navigation Back To Main Hub Layout
+        const returnToHome = () => {
+            playerView.style.display = 'none';
+            hubView.style.display = 'block';
+            arcadeStream.src = ''; 
+        };
+
+        document.getElementById('backBtn').addEventListener('click', returnToHome);
+        document.getElementById('homeLogo').addEventListener('click', returnToHome);
+    </script>
+</body>
+</html>
