@@ -148,9 +148,16 @@ function gameLoop() {
     let currentSegmentIndex = Math.floor(pZ / 10);
     let currentSeg = trackSegments[currentSegmentIndex] || { type: "road" };
 
+    // SOLID GROUND PHYSICS PROTECTION
     if (pY > 0 || currentSeg.type === "pit") {
         pYSpeed -= 0.12; 
         pY += pYSpeed;
+
+        // Snap truck cleanly to road deck to stop clipping under the map
+        if (pY < 0 && currentSeg.type !== "pit") {
+            pY = 0;
+            pYSpeed = 0;
+        }
 
         if (pY < -12) {
             gameActive = false;
@@ -165,7 +172,11 @@ function gameLoop() {
     }
 
     if (currentSeg.type === "loop") {
-        if (pSpeed < 3.5) {
+        if (pSpeed < 3.8) {
+            // Keep vehicle locked exactly on top of the road surface during crashes
+            pY = 0;
+            pSpeed = 0;
+            pYSpeed = 0;
             gameActive = false;
             renderScreenOverlay("CRASHED!", "Not enough momentum to scale the loop-de-loop!", "#ff3333", true);
             return;
