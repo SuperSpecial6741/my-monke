@@ -30,8 +30,8 @@
             <h3 class="section-title">Recommended For You</h3>
             <div class="game-grid" id="arcadeGrid">
                 
-                <!-- Game Card 1: Open Drive Mad Directly in a New Tab -->
-                <div class="game-card" onclick="window.open('https://github.io', '_blank')" data-title="drive mad">
+                <!-- Game Card 1: Absolute Link for Drive Mad -->
+                <a href="https://github.io" target="_blank" class="game-card" data-title="drive mad" style="text-decoration: none; display: block;">
                     <div class="thumbnail" style="background: linear-gradient(135deg, #ff9900, #ff5733);">
                         <span class="emoji-art">🚗</span>
                     </div>
@@ -40,10 +40,10 @@
                         <p class="creator">by Martin Magni</p>
                         <div class="stats">👍 94% • 👤 12K</div>
                     </div>
-                </div>
+                </a>
 
-                <!-- Game Card 2: Open Undead Invasion Directly in a New Tab -->
-                <div class="game-card" onclick="window.open('https://github.io', '_blank')" data-title="undead invasion">
+                <!-- Game Card 2: Absolute Link for Undead Invasion -->
+                <a href="https://github.io" target="_blank" class="game-card" data-title="undead invasion" style="text-decoration: none; display: block;">
                     <div class="thumbnail" style="background: linear-gradient(135deg, #2e7d32, #1b5e20);">
                         <span class="emoji-art">🧟</span>
                     </div>
@@ -52,7 +52,7 @@
                         <p class="creator">by Arcade Labs</p>
                         <div class="stats">👍 89% • 👤 4K</div>
                     </div>
-                </div>
+                </a>
 
             </div>
         </main>
@@ -73,4 +73,3 @@
     </script>
 </body>
 </html>
-
