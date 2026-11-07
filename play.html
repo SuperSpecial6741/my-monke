@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playing... - Arcade Portal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="back-btn">⬅️ Back to Home</a>
+        <h1 id="game-title">Loading Game...</h1>
+    </header>
+
+    <div class="frame-wrapper">
+        <iframe id="arcade-stream" src="" allowfullscreen></iframe>
+    </div>
+
+    <script>
+        // Database linking URLs to your game files or embed links
+        const gameLibrary = {
+            "drive-mad": {
+                title: "Drive Mad",
+                url: "https://gamedistribution.com" // Example distributor link
+            },
+            "undead-invasion": {
+                title: "Undead Invasion",
+                url: "https://gamedistribution.com" 
+            }
+        };
+
+        // Extract game name from URL parameter (e.g., play.html?game=drive-mad)
+        const urlParams = new URLSearchParams(window.location.search);
+        const gameKey = urlParams.get('game');
+
+        if (gameLibrary[gameKey]) {
+            document.getElementById('game-title').innerText = gameLibrary[gameKey].title;
+            document.getElementById('arcade-stream').src = gameLibrary[gameKey].url;
+        } else {
+            document.getElementById('game-title').innerText = "Game Not Found";
+        }
+    </script>
+</body>
+</html>
