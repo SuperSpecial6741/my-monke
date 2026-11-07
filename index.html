@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MONKE PLATFORM - Play & Explore</title>
-    <!-- Fixed stylesheet link to load your dark theme properly -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -31,8 +30,8 @@
             <h3 class="section-title">Recommended For You</h3>
             <div class="game-grid" id="arcadeGrid">
                 
-                <!-- Game Card 1 -->
-                <div class="game-card" data-game="drive-mad" data-title="drive mad">
+                <!-- Game Card 1: Drive Mad -->
+                <div class="game-card" onclick="launchGame('Drive Mad', 'https://github.io')" data-title="drive mad">
                     <div class="thumbnail" style="background: linear-gradient(135deg, #ff9900, #ff5733);">
                         <span class="emoji-art">🚗</span>
                     </div>
@@ -43,8 +42,8 @@
                     </div>
                 </div>
 
-                <!-- Game Card 2 -->
-                <div class="game-card" data-game="undead-invasion" data-title="undead invasion">
+                <!-- Game Card 2: Undead Invasion -->
+                <div class="game-card" onclick="launchGame('Undead Invasion', 'https://github.io')" data-title="undead invasion">
                     <div class="thumbnail" style="background: linear-gradient(135deg, #2e7d32, #1b5e20);">
                         <span class="emoji-art">🧟</span>
                     </div>
@@ -62,7 +61,7 @@
     <!-- The Live Game Screen Player -->
     <div id="playerView" style="display: none;">
         <div class="player-header">
-            <button id="backBtn" class="back-btn">⬅️ Back to Home</button>
+            <button onclick="returnToHome()" class="back-btn">⬅️ Back to Home</button>
             <h1 id="game-title">Loading...</h1>
         </div>
 
@@ -77,20 +76,8 @@
         </div>
     </div>
 
-    <!-- Dynamic Interface Core Script -->
+    <!-- Dynamic Interface Operations Script -->
     <script>
-        // FIXED WORKING LINKS: These load the direct game streams without routing errors
-        const gameLibrary = {
-            "drive-mad": {
-                title: "Drive Mad",
-                url: "https://github.io" 
-            },
-            "undead-invasion": {
-                title: "Undead Invasion",
-                url: "https://github.io" 
-            }
-        };
-
         const hubView = document.getElementById('hubView');
         const playerView = document.getElementById('playerView');
         const gameTitle = document.getElementById('game-title');
@@ -107,27 +94,21 @@
             });
         });
 
-        // Handle Game Launching Click Events
-        cards.forEach(card => {
-            card.addEventListener('click', () => {
-                const gameKey = card.getAttribute('data-game');
-                if (gameLibrary[gameKey]) {
-                    hubView.style.display = 'none';
-                    playerView.style.display = 'block';
-                    gameTitle.innerText = gameLibrary[gameKey].title;
-                    arcadeStream.src = gameLibrary[gameKey].url;
-                }
-            });
-        });
+        // Instant Direct Launch Function
+        function launchGame(title, url) {
+            hubView.style.display = 'none';
+            playerView.style.display = 'block';
+            gameTitle.innerText = title;
+            arcadeStream.src = url;
+        }
 
-        // Handle Navigation Back To Main Hub Layout
-        const returnToHome = () => {
+        // Return Home Function
+        function returnToHome() {
             playerView.style.display = 'none';
             hubView.style.display = 'block';
             arcadeStream.src = ''; 
-        };
+        }
 
-        document.getElementById('backBtn').addEventListener('click', returnToHome);
         document.getElementById('homeLogo').addEventListener('click', returnToHome);
     </script>
 </body>
