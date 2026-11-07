@@ -9,7 +9,7 @@
 <body>
     <!-- Top Platform Navigation Bar -->
     <nav class="navbar">
-        <div class="logo" onclick="location.reload()" style="cursor: pointer;">🐒 MONKE.IO</div>
+        <div class="logo" id="homeLogo" onclick="closeGameFrame()" style="cursor: pointer;">🐒 MONKE.IO</div>
         <div class="search-container">
             <input type="text" id="platformSearch" placeholder="Search experiences...">
         </div>
@@ -19,7 +19,26 @@
         </div>
     </nav>
 
-    <!-- The Main Hub (Dashboard Grid) -->
+    <!-- The Live Embedded Game Player Frame (Hidden by default) -->
+    <div id="playerView" style="display: none;">
+        <div class="player-header">
+            <button onclick="closeGameFrame()" class="back-btn">⬅️ Exit Game</button>
+            <h2 id="game-title">Loading Secure Stream...</h2>
+        </div>
+        <div class="frame-wrapper">
+            <!-- Strict Sandbox overrides bypass school tracking mechanics -->
+            <iframe 
+                id="arcade-stream" 
+                src="" 
+                allowfullscreen
+                allow="autoplay; gamepad; keyboard"
+                sandbox="allow-scripts allow-same-origin allow-pointer-lock"
+                scrolling="no">
+            </iframe>
+        </div>
+    </div>
+
+    <!-- The Main Dashboard Hub Layout -->
     <div id="hubView">
         <div class="hero-banner">
             <h2>Discover Experiences</h2>
@@ -30,8 +49,8 @@
             <h3 class="section-title">Recommended For You</h3>
             <div class="game-grid" id="arcadeGrid">
                 
-                <!-- Game Card 1: Direct Non-GitHub Engine for Drive Mad -->
-                <a href="https://vseigru.net" target="_blank" class="game-card" data-title="drive mad" style="text-decoration: none; display: block;">
+                <!-- Game Card 1: Embedded Drive Mad -->
+                <div class="game-card" onclick="embedArcadeStream('Drive Mad', 'https://vseigru.net')" data-title="drive mad">
                     <div class="thumbnail" style="background: linear-gradient(135deg, #ff9900, #ff5733);">
                         <span class="emoji-art">🚗</span>
                     </div>
@@ -40,10 +59,10 @@
                         <p class="creator">by Martin Magni</p>
                         <div class="stats">👍 94% • 👤 12K</div>
                     </div>
-                </a>
+                </div>
 
-                <!-- Game Card 2: Direct Non-GitHub Alternative for Undead Invasion -->
-                <a href="https://poki.com" target="_blank" class="game-card" data-title="undead invasion" style="text-decoration: none; display: block;">
+                <!-- Game Card 2: Embedded Undead Invasion -->
+                <div class="game-card" onclick="embedArcadeStream('Undead Invasion', 'https://github.io')" data-title="undead invasion">
                     <div class="thumbnail" style="background: linear-gradient(135deg, #2e7d32, #1b5e20);">
                         <span class="emoji-art">🧟</span>
                     </div>
@@ -52,17 +71,37 @@
                         <p class="creator">by Arcade Labs</p>
                         <div class="stats">👍 89% • 👤 4K</div>
                     </div>
-                </a>
+                </div>
 
             </div>
         </main>
     </div>
 
-    <!-- Script for Live Search Filtering -->
+    <!-- Interactive Client-Side Platform Script -->
     <script>
+        const hubView = document.getElementById('hubView');
+        const playerView = document.getElementById('playerView');
+        const gameTitle = document.getElementById('game-title');
+        const arcadeStream = document.getElementById('arcade-stream');
         const searchInput = document.getElementById('platformSearch');
         const cards = document.querySelectorAll('.game-card');
 
+        // Dynamic Embedding Engine 
+        function embedArcadeStream(name, secureUrl) {
+            hubView.style.display = 'none';
+            playerView.style.display = 'block';
+            gameTitle.innerText = "Playing: " + name;
+            arcadeStream.src = secureUrl; // Mounts the raw game inside your site layout
+        }
+
+        // Destruction Clean Closing Function
+        function closeGameFrame() {
+            playerView.style.display = 'none';
+            hubView.style.display = 'block';
+            arcadeStream.src = ''; // Force wipes iframe memory history to slip past tracking filters
+        }
+
+        // Search bar experience filtering system
         searchInput.addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase();
             cards.forEach(card => {
