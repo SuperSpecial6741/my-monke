@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MONKE PLATFORM - Play & Explore</title>
     <link rel="stylesheet" href="style.css">
-    <!-- FIXED: Restored the true stable 3D rendering library script linkage -->
+    <!-- Pulls in the stable internal 3D rendering library -->
     <script src="https://cloudflare.com"></script>
 </head>
 <body>
@@ -28,7 +28,7 @@
             <button onclick="closeGameFrame()" class="back-btn">⬅️ Exit Game</button>
             <h2 id="game-title">Playing: Monke Driver 3D</h2>
         </div>
-        <div class="frame-wrapper" id="canvas-holder" style="background: #87CEEB;">
+        <div class="frame-wrapper" id="canvas-holder" style="background: #87CEEB; position: relative;">
             <!-- The game renders directly onto the page here instead of an iframe -->
         </div>
         <p style="text-align: center; color: #b5b7b9; margin-top: 10px;">Use ARROW KEYS or WASD to accelerate, steer, and balance!</p>
@@ -89,7 +89,7 @@
         function launchInternalGame() {
             hubView.style.display = 'none';
             playerView.style.display = 'block';
-            initGameEngine();
+            setTimeout(initGameEngine, 50);
         }
 
         function initGameEngine() {
@@ -105,47 +105,47 @@
             canvasHolder.appendChild(renderer.domElement);
 
             const light = new THREE.DirectionalLight(0xffffff, 1.2);
-            light.position.set(10, 20, 15);
+            light.position.set(10, 20, 15).normalize();
             scene.add(light);
-            scene.add(new THREE.AmbientLight(0x404040));
+            scene.add(new THREE.AmbientLight(0x666666));
 
-            const trackGeo = new THREE.BoxGeometry(10, 1, 300);
+            const trackGeo = new THREE.BoxGeometry(16, 1, 600);
             const trackMat = new THREE.MeshLambertMaterial({ color: 0x333333 });
             track = new THREE.Mesh(trackGeo, trackMat);
-            track.position.set(0, -0.5, -130);
+            track.position.set(0, -0.5, -250);
             scene.add(track);
 
-            const finishGeo = new THREE.BoxGeometry(10, 1.1, 2);
+            const finishGeo = new THREE.BoxGeometry(16, 1.1, 4);
             const finishMat = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
             const finishLine = new THREE.Mesh(finishGeo, finishMat);
-            finishLine.position.set(0, -0.4, -270);
+            finishLine.position.set(0, -0.4, -500);
             scene.add(finishLine);
 
-            for(let i = 0; i < 5; i++) {
-                const blockGeo = new THREE.BoxGeometry(3, 2, 3);
+            for(let i = 0; i < 8; i++) {
+                const blockGeo = new THREE.BoxGeometry(4, 3, 4);
                 const blockMat = new THREE.MeshLambertMaterial({ color: 0xff0000 });
                 const block = new THREE.Mesh(blockGeo, blockMat);
-                block.position.set(Math.random() * 6 - 3, 1, -50 - (i * 40));
+                block.position.set(Math.random() * 10 - 5, 1.5, -50 - (i * 55));
                 scene.add(block);
             }
 
-            const carGroup = new THREE.Group();
-            const bodyGeo = new THREE.BoxGeometry(2, 1, 4);
+            car = new THREE.Group();
+            
+            const bodyGeo = new THREE.BoxGeometry(3, 1.5, 5);
             const bodyMat = new THREE.MeshLambertMaterial({ color: 0xffcc00 });
             const body = new THREE.Mesh(bodyGeo, bodyMat);
-            body.position.y = 0.8;
-            carGroup.add(body);
+            body.position.y = 1.2;
+            car.add(body);
 
-            const cabGeo = new THREE.BoxGeometry(1.8, 1, 2);
+            const cabGeo = new THREE.BoxGeometry(2.5, 1.2, 2.5);
             const cabMat = new THREE.MeshLambertMaterial({ color: 0x111111 });
             const cab = new THREE.Mesh(cabGeo, cabMat);
-            cab.position.set(0, 1.5, -0.5);
-            carGroup.add(cab);
+            cab.position.set(0, 2.2, -0.5);
+            car.add(cab);
 
-            car = carGroup;
             scene.add(car);
 
-            camera.position.set(0, 5, 8);
+            camera.position.set(0, 6, 12);
 
             window.addEventListener('keydown', handleKeyDown);
             window.addEventListener('keyup', handleKeyUp);
@@ -153,7 +153,6 @@
             animate();
         }
 
-        // FIXED: Restored complete closed operation hooks
         function handleKeyDown(e) { 
             if(e.key in keys) keys[e.key] = true; 
             if(e.key === 'Escape') activatePanicButton(); 
@@ -166,17 +165,18 @@
         function animate() {
             animationFrameId = requestAnimationFrame(animate);
 
-            if (keys.w || keys.ArrowUp) carVelocity -= 0.2;
-            if (keys.s || keys.ArrowDown) carVelocity += 0.15;
-            if (keys.a || keys.ArrowLeft) car.rotation.y += 0.04;
-            if (keys.d || keys.ArrowRight) car.rotation.y -= 0.04;
+            if (keys.w || keys.ArrowUp) carVelocity -= 0.15;
+            if (keys.s || keys.ArrowDown) carVelocity += 0.12;
+            if (keys.a || keys.ArrowLeft) car.rotation.y += 0.03;
+            if (keys.d || keys.ArrowRight) car.rotation.y -= 0.03;
 
-            carVelocity *= 0.95;
+            carVelocity *= 0.94;
             car.translateZ(carVelocity);
 
             camera.position.x = car.position.x;
-            camera.position.z = car.position.z + 10;
-            camera.lookAt(car.position);
+            camera.position.z = car.position.z + 14;
+            camera.position.y = car.position.y + 6;
+            camera.lookAt(new THREE.Vector3(car.position.x, car.position.y + 1, car.position.z));
 
             renderer.render(scene, camera);
         }
