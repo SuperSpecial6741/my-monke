@@ -1,31 +1,130 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Drive Mad</title>
-    <style>
-        html, body { background: #000; width: 100%; height: 100%; padding: 0; margin: 0; overflow: hidden; }
-        #canvas { width: 100vw; height: 100vh; display: block; }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MONKE PLATFORM - Play & Explore</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- The authentic, local HTML5 game engine rendering board -->
-    <canvas id="canvas" oncontextmenu="event.preventDefault()"></canvas>
+    <!-- Top Platform Navigation Bar -->
+    <nav class="navbar" id="platformNavbar">
+        <div class="logo" id="homeLogo" onclick="closeGameFrame()" style="cursor: pointer;">🐒 MONKE.IO</div>
+        <div class="search-container">
+            <input type="text" id="platformSearch" placeholder="Search experiences...">
+        </div>
+        <div class="user-status">
+            <span id="panicTrigger" onclick="activatePanicButton()" style="color: #00b0ff; cursor: pointer; font-weight: bold; margin-right: 15px;">📘 Docs</span>
+            <span class="avatar-icon">👤</span>
+            <span class="username">Guest_Monke</span>
+        </div>
+    </nav>
+
+    <!-- The Live Embedded Game Player Frame -->
+    <div id="playerView" style="display: none; padding: 20px 0;">
+        <div class="player-header" style="max-width: 1024px; margin: 0 auto 15px auto; width: 95%; display: flex; align-items: center; gap: 20px;">
+            <button onclick="closeGameFrame()" class="back-btn">⬅️ Exit Game</button>
+            <h2 id="game-title" style="margin: 0; font-size: 1.5rem;">Loading Secure Stream...</h2>
+        </div>
+        <div id="dynamic-frame-container" style="position: relative; width: 95%; max-width: 1024px; aspect-ratio: 16 / 9; margin: 0 auto; border: 1px solid #383c40; border-radius: 8px; background-color: #000; box-shadow: 0 10px 40px rgba(0,0,0,0.6); overflow: hidden;">
+            <!-- Frame builds dynamically on request -->
+        </div>
+    </div>
+
+    <!-- The Main Dashboard Hub Layout -->
+    <div id="hubView">
+        <div class="hero-banner">
+            <h2>Discover Experiences</h2>
+            <p>Join millions of players across endless unblocked worlds</p>
+        </div>
+
+        <main class="container">
+            <h3 class="section-title">Recommended For You</h3>
+            <div class="game-grid" id="arcadeGrid">
+                
+                <!-- Game Card 1: Points straight to your local drive-mad folder (100% Linkless Bypass) -->
+                <div class="game-card" onclick="forceUnblockedEmbed('Drive Mad', './drive-mad/index.html')" data-title="drive mad official truck local" style="cursor: pointer;">
+                    <div class="thumbnail" style="background: linear-gradient(135deg, #ff9900, #ff5733);">
+                        <span class="emoji-art">🚗</span>
+                    </div>
+                    <div class="card-info">
+                        <h4>Drive Mad (Local Host)</h4>
+                        <p class="creator">by Martin Magni</p>
+                        <div class="stats">👍 94% • 👤 Local</div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- FAKE GOOGLE DOCS PANIC COVER LAYER -->
+    <div id="panicScreen" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #f8f9fa; color: #000; font-family: 'Arial', sans-serif; z-index: 9999; padding: 40px; box-sizing: border-box; overflow-y: auto;">
+        <div style="max-width: 800px; margin: 0 auto; background: white; padding: 50px; border: 1px solid #dadce0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 4px; min-height: 80vh; text-align: left;">
+            <p style="color: #5f6368; font-size: 0.85rem; margin-bottom: 20px;">Saved to Drive • Reading Mode Enabled</p>
+            <h1 style="font-size: 2.2rem; font-weight: normal; margin-bottom: 10px; color: #202124;">Unit 4: Historical Essay Assignment Blueprint</h1>
+            <div style="width: 100%; height: 1px; background-color: #dadce0; margin: 20px 0;"></div>
+            <h3 style="color: #1a73e8; font-weight: normal; margin-top: 25px;">Instructions & Grading Criteria</h3>
+            <p style="line-height: 1.6; color: #3c4043;">Please analyze the primary resource notes compiled over the last session. Your synthesis should highlight structural trends and socioeconomic consequences.</p>
+        </div>
+        <button onclick="deactivatePanicButton()" style="position: fixed; bottom: 10px; right: 10px; background: transparent; border: none; color: #dadce0; cursor: pointer; font-size: 0.75rem;">Exit View</button>
+    </div>
+
     <script>
-        // Real-deal standalone physics parameters configuration script
-        var Module = {
-            preRun: [],
-            postRun: [],
-            print: function(text) { console.log(text); },
-            canvas: (function() {
-                var canvas = document.getElementById('canvas');
-                return canvas;
-            })(),
-            statusElement: null,
-            monitorRunDependencies: function(left) {}
-        };
+        const hubView = document.getElementById('hubView');
+        const playerView = document.getElementById('playerView');
+        const gameTitle = document.getElementById('game-title');
+        const container = document.getElementById('dynamic-frame-container');
+        const panicScreen = document.getElementById('panicScreen');
+
+        function forceUnblockedEmbed(name, targetUrl) {
+            hubView.style.display = 'none';
+            playerView.style.display = 'block';
+            gameTitle.innerText = "Playing: " + name;
+            
+            // Injects your local repository file without any outside web protocols
+            container.innerHTML = `
+                <iframe 
+                    src="${targetUrl}" 
+                    style="width:100%; height:100%; border:none;" 
+                    allowfullscreen
+                    allow="autoplay; gamepad; keyboard"
+                    sandbox="allow-scripts allow-same-origin allow-pointer-lock"
+                    scrolling="no">
+                </iframe>`;
+        }
+
+        function closeGameFrame() {
+            container.innerHTML = ''; 
+            playerView.style.display = 'none';
+            hubView.style.display = 'block';
+        }
+
+        function activatePanicButton() {
+            closeGameFrame();
+            panicScreen.style.display = 'block';
+            document.title = "Google Docs - Working Assignment Document";
+        }
+
+        function deactivatePanicButton() {
+            panicScreen.style.display = 'none';
+            document.title = "MONKE PLATFORM - Play & Explore";
+        }
+
+        // Listens for the Escape key to instantly launch your Google Docs cover layer
+        window.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') activatePanicButton();
+        });
+
+        // Search engine filter logic
+        const searchBox = document.getElementById('platformSearch');
+        searchBox.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            document.querySelectorAll('.game-card').forEach(card => {
+                const title = card.getAttribute('data-title');
+                card.style.display = title.includes(query) ? 'block' : 'none';
+            });
+        });
     </script>
-    <script src="patch.js"></script>
 </body>
 </html>
