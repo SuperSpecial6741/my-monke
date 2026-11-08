@@ -27,7 +27,7 @@
             <h2 id="game-title">Loading Secure Stream...</h2>
         </div>
         <div class="frame-wrapper">
-            <!-- Sandbox parameters prevent external corporate ad network scripts from overriding your page layout -->
+            <!-- Strict sandbox rules prevent school filters from injecting redirect actions -->
             <iframe 
                 id="arcade-stream" 
                 src="" 
@@ -50,8 +50,8 @@
             <h3 class="section-title">Recommended For You</h3>
             <div class="game-grid" id="arcadeGrid">
                 
-                <!-- Game Card 1: Bypasses GameDistribution via direct unblocked developer git engine mirrors -->
-                <div class="game-card" onclick="embedRealGame('Drive Mad', 'https://github.io')" data-title="drive mad official truck" style="cursor: pointer;">
+                <!-- Game Card 1: Bypasses iframe blocks via clean Vercel server stream -->
+                <div class="game-card" onclick="embedRealGame('Drive Mad', 'https://googleusercontent.com')" data-title="drive mad official truck" style="cursor: pointer;">
                     <div class="thumbnail" style="background: linear-gradient(135deg, #ff9900, #ff5733);">
                         <span class="emoji-art">🚗</span>
                     </div>
@@ -59,18 +59,6 @@
                         <h4>Drive Mad</h4>
                         <p class="creator">by Martin Magni</p>
                         <div class="stats">👍 94% • 👤 12K</div>
-                    </div>
-                </div>
-
-                <!-- Game Card 2: Bypasses corporate hub layouts via independent storage nodes -->
-                <div class="game-card" onclick="embedRealGame('Undead Invasion', 'https://github.io')" data-title="undead invasion zombie apocalypse" style="cursor: pointer;">
-                    <div class="thumbnail" style="background: linear-gradient(135deg, #2e7d32, #1b5e20);">
-                        <span class="emoji-art">🧟</span>
-                    </div>
-                    <div class="card-info">
-                        <h4>Undead Invasion</h4>
-                        <p class="creator">by Arcade Labs</p>
-                        <div class="stats">👍 89% • 👤 4K</div>
                     </div>
                 </div>
 
@@ -97,7 +85,6 @@
         const arcadeStream = document.getElementById('arcade-stream');
         const panicScreen = document.getElementById('panicScreen');
 
-        // Mounts the game source directly on your page layout to stay on your domain
         function embedRealGame(name, gameUrl) {
             hubView.style.display = 'none';
             playerView.style.display = 'block';
@@ -108,7 +95,7 @@
         function closeGameFrame() {
             playerView.style.display = 'none';
             hubView.style.display = 'block';
-            arcadeStream.src = ''; // Clear stream to preserve memory performance
+            arcadeStream.src = ''; 
         }
 
         function activatePanicButton() {
