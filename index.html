@@ -9,7 +9,7 @@
 <body>
     <!-- Top Platform Navigation Bar -->
     <nav class="navbar" id="platformNavbar">
-        <div class="logo" id="homeLogo" onclick="closeGameFrame()" style="cursor: pointer;">🐒 MONKE.IO</div>
+        <div class="logo" id="homeLogo" onclick="location.reload()" style="cursor: pointer;">🐒 MONKE.IO</div>
         <div class="search-container">
             <input type="text" id="platformSearch" placeholder="Search experiences...">
         </div>
@@ -19,24 +19,6 @@
             <span class="username">Guest_Monke</span>
         </div>
     </nav>
-
-    <!-- The Live Embedded Game Player Frame -->
-    <div id="playerView" style="display: none;">
-        <div class="player-header">
-            <button onclick="closeGameFrame()" class="back-btn">⬅️ Exit Game</button>
-            <h2 id="game-title">Loading Secure Stream...</h2>
-        </div>
-        <div class="frame-wrapper">
-            <iframe 
-                id="arcade-stream" 
-                src="" 
-                allowfullscreen
-                allow="autoplay; gamepad; keyboard"
-                sandbox="allow-scripts allow-same-origin allow-pointer-lock"
-                scrolling="no">
-            </iframe>
-        </div>
-    </div>
 
     <!-- The Main Dashboard Hub Layout -->
     <div id="hubView">
@@ -49,8 +31,8 @@
             <h3 class="section-title">Recommended For You</h3>
             <div class="game-grid" id="arcadeGrid">
                 
-                <!-- Game Card 1: Drive Mad (Cloudflare Storage) -->
-                <div class="game-card" onclick="embedRealGame('Drive Mad', 'https://r2.dev')" data-title="drive mad official truck" style="cursor: pointer;">
+                <!-- Game Card 1: Drive Mad -->
+                <a href="https://r2.dev" target="_blank" class="game-card" data-title="drive mad official truck" style="text-decoration: none; display: block;">
                     <div class="thumbnail" style="background: linear-gradient(135deg, #ff9900, #ff5733);">
                         <span class="emoji-art">🚗</span>
                     </div>
@@ -59,10 +41,10 @@
                         <p class="creator">by Martin Magni</p>
                         <div class="stats">👍 94% • 👤 12K</div>
                     </div>
-                </div>
+                </a>
 
-                <!-- Game Card 2: Undead Invasion (Cloudflare Mirror Node) -->
-                <div class="game-card" onclick="embedRealGame('Undead Invasion', 'https://r2.dev')" data-title="undead invasion zombie apocalypse" style="cursor: pointer;">
+                <!-- Game Card 2: Undead Invasion -->
+                <a href="https://r2.dev" target="_blank" class="game-card" data-title="undead invasion zombie apocalypse" style="text-decoration: none; display: block;">
                     <div class="thumbnail" style="background: linear-gradient(135deg, #2e7d32, #1b5e20);">
                         <span class="emoji-art">🧟</span>
                     </div>
@@ -71,10 +53,10 @@
                         <p class="creator">by Arcade Labs</p>
                         <div class="stats">👍 89% • 👤 4K</div>
                     </div>
-                </div>
+                </a>
 
-                <!-- Game Card 3: Retro Bowl (Cloudflare Mirror Node) -->
-                <div class="game-card" onclick="embedRealGame('Retro Bowl', 'https://r2.dev')" data-title="retro bowl football gridiron" style="cursor: pointer;">
+                <!-- Game Card 3: Retro Bowl -->
+                <a href="https://r2.dev" target="_blank" class="game-card" data-title="retro bowl football gridiron" style="text-decoration: none; display: block;">
                     <div class="thumbnail" style="background: linear-gradient(135deg, #0d47a1, #1565c0);">
                         <span class="emoji-art">🏈</span>
                     </div>
@@ -83,10 +65,10 @@
                         <p class="creator">by New Star Games</p>
                         <div class="stats">👍 97% • 👤 45K</div>
                     </div>
-                </div>
+                </a>
 
-                <!-- Game Card 4: Level Devil (Cloudflare Mirror Node) -->
-                <div class="game-card" onclick="embedRealGame('Level Devil', 'https://r2.dev')" data-title="level devil troll platformer raging" style="cursor: pointer;">
+                <!-- Game Card 4: Level Devil -->
+                <a href="https://r2.dev" target="_blank" class="game-card" data-title="level devil troll platformer raging" style="text-decoration: none; display: block;">
                     <div class="thumbnail" style="background: linear-gradient(135deg, #b71c1c, #880e4f);">
                         <span class="emoji-art">😈</span>
                     </div>
@@ -95,7 +77,7 @@
                         <p class="creator">by Unept</p>
                         <div class="stats">👍 91% • 👤 23K</div>
                     </div>
-                </div>
+                </a>
 
             </div>
         </main>
@@ -114,27 +96,9 @@
     </div>
 
     <script>
-        const hubView = document.getElementById('hubView');
-        const playerView = document.getElementById('playerView');
-        const gameTitle = document.getElementById('game-title');
-        const arcadeStream = document.getElementById('arcade-stream');
         const panicScreen = document.getElementById('panicScreen');
 
-        function embedRealGame(name, gameUrl) {
-            hubView.style.display = 'none';
-            playerView.style.display = 'block';
-            gameTitle.innerText = "Playing: " + name;
-            arcadeStream.src = gameUrl; 
-        }
-
-        function closeGameFrame() {
-            playerView.style.display = 'none';
-            hubView.style.display = 'block';
-            arcadeStream.src = ''; 
-        }
-
         function activatePanicButton() {
-            closeGameFrame();
             panicScreen.style.display = 'block';
             document.title = "Google Docs - Working Assignment Document";
         }
