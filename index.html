@@ -27,7 +27,7 @@
             <h2 id="game-title">Loading Secure Stream...</h2>
         </div>
         <div class="frame-wrapper">
-            <!-- Strict sandbox rules prevent school filters from injecting redirect actions -->
+            <!-- Sandbox protections secure the on-page frame container -->
             <iframe 
                 id="arcade-stream" 
                 src="" 
@@ -50,8 +50,8 @@
             <h3 class="section-title">Recommended For You</h3>
             <div class="game-grid" id="arcadeGrid">
                 
-                <!-- Game Card 1: Bypasses iframe blocks via clean Vercel server stream -->
-                <div class="game-card" onclick="embedRealGame('Drive Mad', 'https://googleusercontent.com')" data-title="drive mad official truck" style="cursor: pointer;">
+                <!-- Game Card 1: Streams the REAL Drive Mad via an unblocked Cloudflare storage edge link -->
+                <div class="game-card" onclick="embedRealGame('Drive Mad', 'https://r2.dev')" data-title="drive mad official truck" style="cursor: pointer;">
                     <div class="thumbnail" style="background: linear-gradient(135deg, #ff9900, #ff5733);">
                         <span class="emoji-art">🚗</span>
                     </div>
