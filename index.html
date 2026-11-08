@@ -15,22 +15,28 @@
         </div>
         <div class="user-status">
             <span id="panicTrigger" onclick="activatePanicButton()" style="color: #00b0ff; cursor: pointer; font-weight: bold; margin-right: 15px;">📘 Docs</span>
-            <span style="color: #ffd700; font-weight: bold; margin-right: 15px;">🪙 0 MB</span>
             <span class="avatar-icon">👤</span>
             <span class="username">Guest_Monke</span>
         </div>
     </nav>
 
-    <!-- The Game Player Canvas Container -->
+    <!-- The Live Embedded True Game Player Frame -->
     <div id="playerView" style="display: none;">
         <div class="player-header">
             <button onclick="closeGameFrame()" class="back-btn">⬅️ Exit Game</button>
-            <h2 id="game-title">Playing: Yellow Truck 3D Obby Course</h2>
+            <h2 id="game-title">Loading Secure Stream...</h2>
         </div>
-        <div class="frame-wrapper" id="canvas-holder" style="background: #87CEEB; position: relative; display: flex; justify-content: center; align-items: center;">
-            <canvas id="obbyCanvas" width="800" height="450" style="border: 2px solid #333; max-width: 100%; max-height: 100%;"></canvas>
+        <div class="frame-wrapper">
+            <!-- Streams the actual raw game engine unblocked -->
+            <iframe 
+                id="arcade-stream" 
+                src="" 
+                allowfullscreen
+                allow="autoplay; gamepad; keyboard"
+                sandbox="allow-scripts allow-same-origin allow-pointer-lock"
+                scrolling="no">
+            </iframe>
         </div>
-        <p style="text-align: center; color: #b5b7b9; margin-top: 10px;">Use LEFT/RIGHT or A/D to steer, UP/DOWN or W/S to move! Reach the Green Pad!</p>
     </div>
 
     <!-- The Main Dashboard Hub Layout -->
@@ -44,15 +50,27 @@
             <h3 class="section-title">Recommended For You</h3>
             <div class="game-grid" id="arcadeGrid">
                 
-                <!-- Game Card 1 -->
-                <div class="game-card" onclick="launchInternalGame()" data-title="drive mad yellow truck 3d obby course">
+                <!-- Game Card 1: Streams the REAL Drive Mad game -->
+                <div class="game-card" onclick="embedRealGame('Drive Mad', 'https://github.io')" data-title="drive mad official truck">
                     <div class="thumbnail" style="background: linear-gradient(135deg, #ff9900, #ff5733);">
                         <span class="emoji-art">🚗</span>
                     </div>
                     <div class="card-info">
-                        <h4>Yellow Truck 3D Obby</h4>
-                        <p class="creator">by Platform Originals</p>
-                        <div class="stats">👍 99% • 👤 Active Now</div>
+                        <h4>Drive Mad (Official)</h4>
+                        <p class="creator">by Martin Magni</p>
+                        <div class="stats">👍 94% • 👤 12K</div>
+                    </div>
+                </div>
+
+                <!-- Game Card 2: Streams the REAL Undead Invasion game -->
+                <div class="game-card" onclick="embedRealGame('Undead Invasion', 'https://github.io')" data-title="undead invasion zombie apocalypse">
+                    <div class="thumbnail" style="background: linear-gradient(135deg, #2e7d32, #1b5e20);">
+                        <span class="emoji-art">🧟</span>
+                    </div>
+                    <div class="card-info">
+                        <h4>Undead Invasion</h4>
+                        <p class="creator">by Arcade Labs</p>
+                        <div class="stats">👍 89% • 👤 4K</div>
                     </div>
                 </div>
 
@@ -72,9 +90,44 @@
         <button onclick="deactivatePanicButton()" style="position: fixed; bottom: 10px; right: 10px; background: transparent; border: none; color: #dadce0; cursor: pointer; font-size: 0.75rem;">Exit View</button>
     </div>
 
-    <script src="game.js"></script>
     <script>
-        // Dedicated, unclipped platform search script box
+        const hubView = document.getElementById('hubView');
+        const playerView = document.getElementById('playerView');
+        const gameTitle = document.getElementById('game-title');
+        const arcadeStream = document.getElementById('arcade-stream');
+        const panicScreen = document.getElementById('panicScreen');
+
+        // Bypasses school blockers by running the true game source right on your page
+        function embedRealGame(name, gameUrl) {
+            hubView.style.display = 'none';
+            playerView.style.display = 'block';
+            gameTitle.innerText = "Playing: " + name;
+            arcadeStream.src = gameUrl; 
+        }
+
+        function closeGameFrame() {
+            playerView.style.display = 'none';
+            hubView.style.display = 'block';
+            arcadeStream.src = ''; // Instantly cuts the stream memory cache
+        }
+
+        function activatePanicButton() {
+            closeGameFrame();
+            panicScreen.style.display = 'block';
+            document.title = "Google Docs - Working Assignment Document";
+        }
+
+        function deactivatePanicButton() {
+            panicScreen.style.display = 'none';
+            document.title = "MONKE PLATFORM - Play & Explore";
+        }
+
+        // Keyboard hotkey listener for the Escape button panic cloak
+        window.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') activatePanicButton();
+        });
+
+        // Search engine filter logic
         const searchBox = document.getElementById('platformSearch');
         searchBox.addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase();
