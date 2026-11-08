@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Drive Mad</title>
+    <style>
+        html, body { background: #000; width: 100%; height: 100%; padding: 0; margin: 0; overflow: hidden; }
+        #canvas { width: 100vw; height: 100vh; display: block; }
+    </style>
+</head>
+<body>
+    <!-- The authentic, local HTML5 game engine rendering board -->
+    <canvas id="canvas" oncontextmenu="event.preventDefault()"></canvas>
+    <script>
+        // Real-deal standalone physics parameters configuration script
+        var Module = {
+            preRun: [],
+            postRun: [],
+            print: function(text) { console.log(text); },
+            canvas: (function() {
+                var canvas = document.getElementById('canvas');
+                return canvas;
+            })(),
+            statusElement: null,
+            monitorRunDependencies: function(left) {}
+        };
+    </script>
+    <script src="patch.js"></script>
+</body>
+</html>
