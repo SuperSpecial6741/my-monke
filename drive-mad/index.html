@@ -4,31 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MONKE PLATFORM - Play & Explore</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Base Platform Theme Styling */
+        body { margin: 0; background-color: #0b0c10; color: #fff; font-family: 'Segoe UI', Arial, sans-serif; overflow-x: hidden; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; background-color: #1f2833; padding: 10px 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+        .logo { font-size: 1.5rem; font-weight: bold; color: #66fcf1; }
+        .search-container input { background-color: #0b0c10; border: 1px solid #45f3ff; padding: 8px 15px; border-radius: 20px; color: #fff; width: 250px; outline: none; }
+        .hero-banner { background: linear-gradient(135deg, #1f2833, #0b0c10); text-align: center; padding: 40px 20px; border-bottom: 2px solid #1f2833; }
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; margin-top: 20px; }
+        .game-card { background-color: #1f2833; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: transform 0.2s; }
+        .game-card:hover { transform: translateY(-5px); }
+        .thumbnail { height: 140px; display: flex; justify-content: center; align-items: center; font-size: 3.5rem; }
+        .card-info { padding: 15px; }
+        .card-info h4 { margin: 0 0 5px 0; font-size: 1.2rem; }
+        .card-info p { margin: 0; color: #c5a059; font-size: 0.9rem; }
+        .stats { margin-top: 10px; font-size: 0.8rem; color: #66fcf1; }
+        
+        /* Full-Screen Arcade Panel Engine Layout */
+        .player-header { display: flex; align-items: center; justify-content: space-between; max-width: 900px; margin: 20px auto 10px auto; width: 95%; }
+        .back-btn { background-color: #ff3333; color: white; border: none; padding: 8px 18px; font-weight: bold; border-radius: 6px; cursor: pointer; }
+        .frame-wrapper { position: relative; width: 95%; max-width: 900px; aspect-ratio: 16 / 9; margin: 0 auto; border: 2px solid #45f3ff; border-radius: 10px; background-color: #000; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+        canvas { background: #87CEEB; width: 100%; height: 100%; display: block; }
+    </style>
 </head>
 <body>
     <!-- Top Platform Navigation Bar -->
-    <nav class="navbar" id="platformNavbar">
+    <nav class="navbar">
         <div class="logo" id="homeLogo" onclick="closeGameFrame()" style="cursor: pointer;">🐒 MONKE.IO</div>
         <div class="search-container">
             <input type="text" id="platformSearch" placeholder="Search experiences...">
         </div>
         <div class="user-status">
             <span id="panicTrigger" onclick="activatePanicButton()" style="color: #00b0ff; cursor: pointer; font-weight: bold; margin-right: 15px;">📘 Docs</span>
-            <span class="avatar-icon">👤</span>
-            <span class="username">Guest_Monke</span>
+            <span class="avatar-icon">👤 Guest_Monke</span>
         </div>
     </nav>
 
     <!-- The Live Embedded Game Player Frame -->
-    <div id="playerView" style="display: none; padding: 20px 0;">
-        <div class="player-header" style="max-width: 1024px; margin: 0 auto 15px auto; width: 95%; display: flex; align-items: center; gap: 20px;">
+    <div id="playerView" style="display: none;">
+        <div class="player-header">
             <button onclick="closeGameFrame()" class="back-btn">⬅️ Exit Game</button>
-            <h2 id="game-title" style="margin: 0; font-size: 1.5rem;">Loading Secure Stream...</h2>
+            <h2 id="game-title" style="margin: 0; font-size: 1.4rem;">Playing: Drive Mad (Native)</h2>
         </div>
-        <div id="dynamic-frame-container" style="position: relative; width: 95%; max-width: 1024px; aspect-ratio: 16 / 9; margin: 0 auto; border: 1px solid #383c40; border-radius: 8px; background-color: #000; box-shadow: 0 10px 40px rgba(0,0,0,0.6); overflow: hidden;">
-            <!-- Frame builds dynamically on request -->
+        <div class="frame-wrapper">
+            <!-- Native 3D Ray-Projector Canvas Engine -->
+            <canvas id="obbyCanvas" width="800" height="450"></canvas>
         </div>
+        <p style="text-align: center; color: #b5b7b9; margin-top: 10px;">Controls: Use W/S or UP/DOWN to drive, A/D or LEFT/RIGHT to lean and steer!</p>
     </div>
 
     <!-- The Main Dashboard Hub Layout -->
@@ -37,94 +60,143 @@
             <h2>Discover Experiences</h2>
             <p>Join millions of players across endless unblocked worlds</p>
         </div>
-
         <main class="container">
             <h3 class="section-title">Recommended For You</h3>
             <div class="game-grid" id="arcadeGrid">
-                
-                <!-- Game Card 1: Links strictly locally to drop all unpkg hooks -->
-                <div class="game-card" onclick="forceUnblockedEmbed('Drive Mad', './drive-mad/index.html')" data-title="drive mad official truck local" style="cursor: pointer;">
-                    <div class="thumbnail" style="background: linear-gradient(135deg, #ff9900, #ff5733);">
-                        <span class="emoji-art">🚗</span>
-                    </div>
+                <div class="game-card" onclick="launchInternalGame()" style="cursor: pointer;">
+                    <div class="thumbnail" style="background: linear-gradient(135deg, #ff9900, #ff5733);">🚗</div>
                     <div class="card-info">
                         <h4>Drive Mad</h4>
                         <p class="creator">by Martin Magni</p>
-                        <div class="stats">👍 94% • 👤 Local Host</div>
+                        <div class="stats">👍 95% • 👤 Active Now</div>
                     </div>
                 </div>
-
             </div>
         </main>
     </div>
 
     <!-- FAKE GOOGLE DOCS PANIC COVER LAYER -->
     <div id="panicScreen" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #f8f9fa; color: #000; font-family: 'Arial', sans-serif; z-index: 9999; padding: 40px; box-sizing: border-box; overflow-y: auto;">
-        <div style="max-width: 800px; margin: 0 auto; background: white; padding: 50px; border: 1px solid #dadce0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 4px; min-height: 80vh; text-align: left;">
-            <p style="color: #5f6368; font-size: 0.85rem; margin-bottom: 20px;">Saved to Drive • Reading Mode Enabled</p>
-            <h1 style="font-size: 2.2rem; font-weight: normal; margin-bottom: 10px; color: #202124;">Unit 4: Historical Essay Assignment Blueprint</h1>
+        <div style="max-width: 800px; margin: 0 auto; background: white; padding: 50px; border: 1px solid #dadce0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); min-height: 80vh;">
+            <p style="color: #5f6368; font-size: 0.85rem;">Saved to Drive • Reading Mode Enabled</p>
+            <h1 style="font-size: 2.2rem; font-weight: normal; margin-top: 10px;">Unit 4: Historical Essay Assignment Blueprint</h1>
             <div style="width: 100%; height: 1px; background-color: #dadce0; margin: 20px 0;"></div>
-            <h3 style="color: #1a73e8; font-weight: normal; margin-top: 25px;">Instructions & Grading Criteria</h3>
             <p style="line-height: 1.6; color: #3c4043;">Please analyze the primary resource notes compiled over the last session. Your synthesis should highlight structural trends and socioeconomic consequences.</p>
         </div>
-        <button onclick="deactivatePanicButton()" style="position: fixed; bottom: 10px; right: 10px; background: transparent; border: none; color: #dadce0; cursor: pointer; font-size: 0.75rem;">Exit View</button>
+        <button onclick="deactivatePanicButton()" style="position: fixed; bottom: 10px; right: 10px; background: transparent; border: none; color: #dadce0; cursor: pointer;">Exit View</button>
     </div>
 
     <script>
         const hubView = document.getElementById('hubView');
         const playerView = document.getElementById('playerView');
-        const gameTitle = document.getElementById('game-title');
-        const container = document.getElementById('dynamic-frame-container');
         const panicScreen = document.getElementById('panicScreen');
+        const canvas = document.getElementById('obbyCanvas');
+        const ctx = canvas.getContext('2d');
 
-        function forceUnblockedEmbed(name, targetUrl) {
+        let animationId, gameActive, pX, pY, pZ, pSpeed, pYSpeed, pTilt, trackSegments, finishZ;
+        let currentLevel = 1;
+        let keys = { w: false, a: false, s: false, d: false, ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false };
+
+        function launchInternalGame() {
             hubView.style.display = 'none';
             playerView.style.display = 'block';
-            gameTitle.innerText = "Playing: " + name;
+            setupLevel(currentLevel);
+        }
+
+        function setupLevel(level) {
+            gameActive = true; pX = pY = pZ = pSpeed = pYSpeed = pTilt = 0; finishZ = 600;
+            trackSegments = [];
             
-            // Appends a cache destroyer timestamp to force the browser to look inside your repository folders
-            const freshUrl = targetUrl + "?cachebust=" + new Date().getTime();
+            for (let z = 0; z <= finishZ + 40; z += 10) {
+                let type = 'road';
+                if (z === 100 || z === 260 || z === 400) type = 'ramp';
+                if ((z > 110 && z < 140) || (z > 270 && z < 310)) type = 'pit';
+                if (z === 180 || z === 350) type = 'block';
+                trackSegments.push({ z: z, type: type });
+            }
+
+            window.addEventListener('keydown', handleKeyDown);
+            window.addEventListener('keyup', handleKeyUp);
+            gameLoop();
+        }
+
+        function handleKeyDown(e) { if (e.key in keys) keys[e.key] = true; if (e.key === 'Escape') activatePanicButton(); }
+        function handleKeyUp(e) { if (e.key in keys) keys[e.key] = false; }
+
+        function render3DBlock(x, yOffset, z, width, height, color, type = 'road') {
+            let relativeZ = z - pZ; if (relativeZ <= -15) return;
+            let targetZ = relativeZ + 12; if (targetZ <= 1) return;
+            let scale = 350 / targetZ;
+            let screenX = (canvas.width / 2) + (x - pX) * scale;
+            let screenY = (canvas.height / 2) + (3.5 + yOffset - pY) * scale;
+            let w = width * scale, h = height * scale;
+
+            if (type === 'pit') return;
+            if (type === 'ramp') {
+                ctx.fillStyle = '#ff5722'; ctx.beginPath(); ctx.moveTo(screenX - w/2, screenY);
+                ctx.lineTo(screenX + w/2, screenY); ctx.lineTo(screenX, screenY - h * 2.5);
+                ctx.closePath(); ctx.fill(); return;
+            }
+            ctx.fillStyle = color; ctx.fillRect(screenX - w / 2, screenY - h, w, h);
+            ctx.strokeStyle = 'rgba(0,0,0,0.15)'; ctx.strokeRect(screenX - w / 2, screenY - h, w, h);
+        }
+
+        function gameLoop() {
+            if (!gameActive) return;
+            animationId = requestAnimationFrame(gameLoop);
+
+            if (keys.w || keys.ArrowUp) pSpeed += 0.22;
+            if (keys.s || keys.ArrowDown) pSpeed -= 0.15;
+            if (keys.a || keys.ArrowLeft) pTilt -= 0.03;
+            if (keys.d || keys.ArrowRight) pTilt += 0.03;
             
-            container.innerHTML = `
-                <iframe 
-                    src="${freshUrl}" 
-                    style="width:100%; height:100%; border:none;" 
-                    allowfullscreen
-                    allow="autoplay; gamepad; keyboard"
-                    sandbox="allow-scripts allow-same-origin allow-pointer-lock"
-                    scrolling="no">
-                </iframe>`;
-        }
+            pSpeed *= 0.94; pZ += pSpeed;
+            pTilt *= 0.85; 
 
-        function closeGameFrame() {
-            container.innerHTML = ''; 
-            playerView.style.display = 'none';
-            hubView.style.display = 'block';
-        }
+            let seg = trackSegments[Math.floor(pZ / 10)] || { type: 'road' };
+            
+            if (pY > 0 || seg.type === 'pit') {
+                pYSpeed -= 0.12; pY += pYSpeed;
+                if (pY < 0 && seg.type !== 'pit') { pY = 0; pYSpeed = 0; }
+                if (pY < -12) { gameActive = false; renderOverlay('WASTED! 💥', 'Fell into the stunt gap!'); return; }
+            }
+            if (seg.type === 'ramp' && pY <= 0) { pYSpeed = 2.8 + (pSpeed * 0.35); pY += pYSpeed; }
+            if (seg.type === 'block' && Math.abs(pY) < 2) { gameActive = false; renderOverlay('CRASHED! 💥', 'Hit a concrete barrier box!'); return; }
+            if (Math.abs(pTilt) > 0.6) { gameActive = false; renderOverlay('FLIPPED! 🔄', 'Truck flipped upside down!'); return; }
 
-        function activatePanicButton() {
-            closeGameFrame();
-            panicScreen.style.display = 'block';
-            document.title = "Google Docs - Working Assignment Document";
-        }
-
-        function deactivatePanicButton() {
-            panicScreen.style.display = 'none';
-            document.title = "MONKE PLATFORM - Play & Explore";
-        }
-
-        window.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') activatePanicButton();
-        });
-
-        const searchBox = document.getElementById('platformSearch');
-        searchBox.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            document.querySelectorAll('.game-card').forEach(card => {
-                const title = card.getAttribute('data-title');
-                card.style.display = title.includes(query) ? 'block' : 'none';
-            });
-        });
-    </script>
-</body>
-</html>
+            ctx.fillStyle = '#87CEEB'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+trackSegments.forEach(s => { if (s.z - pZ <= 240 && s.z - pZ >= -40) render3DBlock(0, 0, s.z, 16, 0.4, '#3e4144', s.type); });
+trackSegments.forEach(s => { if (s.type === 'block' && s.z - pZ <= 240 && s.z - pZ >= -40) render3DBlock(0, -0.4, s.z, 4, 4, '#ff3333'); });
+render3DBlock(0, -0.1, finishZ, 16, 0.6, '#00ff66');
+let scale = 350 / 12, tX = canvas.width / 2, tY = (canvas.height / 2) + 3.9 * scale;
+ctx.save(); ctx.translate(tX, tY - 20); ctx.rotate(pTilt); ctx.translate(-tX, -(tY - 20));
+ctx.fillStyle = '#ffcc00'; ctx.fillRect(tX - 25, tY - 45, 50, 25);
+ctx.fillStyle = '#111111'; ctx.fillRect(tX - 18, tY - 65, 36, 20);
+ctx.fillStyle = '#1e1e1e'; ctx.fillRect(tX - 34, tY - 25, 12, 26); ctx.fillRect(tX + 22, tY - 25, 12, 26);
+ctx.restore();
+if (pZ >= finishZ) {
+gameActive = false; currentLevel++;
+renderOverlay('LEVEL PASSED! 🎉', 'Advancing to Level ' + currentLevel + '...');
+setTimeout(() => { setupLevel(currentLevel); }, 2000);
+return;
+}
+ctx.fillStyle = '#ffffff'; ctx.font = 'bold 15px monospace';
+ctx.fillText('STAGE   : Level ' + currentLevel, 35, 40);
+ctx.fillText('VELOCITY: ' + Math.floor(Math.abs(pSpeed) * 40) + ' MPH', 35, 65);
+}
+function renderOverlay(title, msg) {
+ctx.fillStyle = 'rgba(15, 17, 19, 0.9)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+ctx.fillStyle = '#ffcc00'; ctx.font = 'bold 40px Arial'; ctx.textAlign = 'center'; ctx.fillText(title, canvas.width/2, canvas.height/2 - 20);
+ctx.fillStyle = '#fff'; ctx.font = '18px Arial'; ctx.fillText(msg, canvas.width/2, canvas.height/2 + 20);
+ctx.textAlign = 'left';
+}
+function closeGameFrame() { gameActive = false; cancelAnimationFrame(animationId); window.removeEventListener('keydown', handleKeyDown); window.removeEventListener('keyup', handleKeyUp); playerView.style.display = 'none'; hubView.style.display = 'block'; }
+function activatePanicButton() { closeGameFrame(); panicScreen.style.display = 'block'; document.title = 'Google Docs - Working Assignment Document'; }
+function deactivatePanicButton() { panicScreen.style.display = 'none'; document.title = 'MONKE PLATFORM - Play & Explore'; }
+const searchBox = document.getElementById('platformSearch');
+searchBox.addEventListener('input', (e) => {
+const query = e.target.value.toLowerCase();
+document.querySelectorAll('.game-card').forEach(card => {
+card.style.display = card.innerText.toLowerCase().includes(query) ? 'block' : 'none';
+});
+});
