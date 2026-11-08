@@ -9,7 +9,7 @@
 <body>
     <!-- Top Platform Navigation Bar -->
     <nav class="navbar" id="platformNavbar">
-        <div class="logo" id="homeLogo" onclick="closeGameFrame()" style="cursor: pointer;">🐒 MONKE.IO</div>
+        <div class="logo" id="homeLogo" onclick="location.reload()" style="cursor: pointer;">🐒 MONKE.IO</div>
         <div class="search-container">
             <input type="text" id="platformSearch" placeholder="Search experiences...">
         </div>
@@ -19,25 +19,6 @@
             <span class="username">Guest_Monke</span>
         </div>
     </nav>
-
-    <!-- The Live Embedded True Game Player Frame -->
-    <div id="playerView" style="display: none;">
-        <div class="player-header">
-            <button onclick="closeGameFrame()" class="back-btn">⬅️ Exit Game</button>
-            <h2 id="game-title">Loading Secure Stream...</h2>
-        </div>
-        <div class="frame-wrapper">
-            <!-- Streams the actual raw game engine unblocked -->
-            <iframe 
-                id="arcade-stream" 
-                src="" 
-                allowfullscreen
-                allow="autoplay; gamepad; keyboard"
-                sandbox="allow-scripts allow-same-origin allow-pointer-lock"
-                scrolling="no">
-            </iframe>
-        </div>
-    </div>
 
     <!-- The Main Dashboard Hub Layout -->
     <div id="hubView">
@@ -50,8 +31,8 @@
             <h3 class="section-title">Recommended For You</h3>
             <div class="game-grid" id="arcadeGrid">
                 
-                <!-- Game Card 1: Streams the REAL Drive Mad game -->
-                <div class="game-card" onclick="embedRealGame('Drive Mad', 'https://github.io')" data-title="drive mad official truck">
+                <!-- Game Card 1: Launches the REAL Drive Mad in a fresh tab -->
+                <a href="https://github.io" target="_blank" class="game-card" data-title="drive mad official truck" style="text-decoration: none; display: block;">
                     <div class="thumbnail" style="background: linear-gradient(135deg, #ff9900, #ff5733);">
                         <span class="emoji-art">🚗</span>
                     </div>
@@ -60,10 +41,10 @@
                         <p class="creator">by Martin Magni</p>
                         <div class="stats">👍 94% • 👤 12K</div>
                     </div>
-                </div>
+                </a>
 
-                <!-- Game Card 2: Streams the REAL Undead Invasion game -->
-                <div class="game-card" onclick="embedRealGame('Undead Invasion', 'https://github.io')" data-title="undead invasion zombie apocalypse">
+                <!-- Game Card 2: Launches the REAL Undead Invasion in a fresh tab -->
+                <a href="https://github.io" target="_blank" class="game-card" data-title="undead invasion zombie apocalypse" style="text-decoration: none; display: block;">
                     <div class="thumbnail" style="background: linear-gradient(135deg, #2e7d32, #1b5e20);">
                         <span class="emoji-art">🧟</span>
                     </div>
@@ -72,7 +53,7 @@
                         <p class="creator">by Arcade Labs</p>
                         <div class="stats">👍 89% • 👤 4K</div>
                     </div>
-                </div>
+                </a>
 
             </div>
         </main>
@@ -91,28 +72,9 @@
     </div>
 
     <script>
-        const hubView = document.getElementById('hubView');
-        const playerView = document.getElementById('playerView');
-        const gameTitle = document.getElementById('game-title');
-        const arcadeStream = document.getElementById('arcade-stream');
         const panicScreen = document.getElementById('panicScreen');
 
-        // Bypasses school blockers by running the true game source right on your page
-        function embedRealGame(name, gameUrl) {
-            hubView.style.display = 'none';
-            playerView.style.display = 'block';
-            gameTitle.innerText = "Playing: " + name;
-            arcadeStream.src = gameUrl; 
-        }
-
-        function closeGameFrame() {
-            playerView.style.display = 'none';
-            hubView.style.display = 'block';
-            arcadeStream.src = ''; // Instantly cuts the stream memory cache
-        }
-
         function activatePanicButton() {
-            closeGameFrame();
             panicScreen.style.display = 'block';
             document.title = "Google Docs - Working Assignment Document";
         }
