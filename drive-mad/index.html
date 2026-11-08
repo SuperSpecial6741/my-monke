@@ -42,15 +42,15 @@
             <h3 class="section-title">Recommended For You</h3>
             <div class="game-grid" id="arcadeGrid">
                 
-                <!-- Game Card 1: Points straight to your local drive-mad folder (100% Linkless Bypass) -->
+                <!-- Game Card 1: Links strictly locally to drop all unpkg hooks -->
                 <div class="game-card" onclick="forceUnblockedEmbed('Drive Mad', './drive-mad/index.html')" data-title="drive mad official truck local" style="cursor: pointer;">
                     <div class="thumbnail" style="background: linear-gradient(135deg, #ff9900, #ff5733);">
                         <span class="emoji-art">🚗</span>
                     </div>
                     <div class="card-info">
-                        <h4>Drive Mad (Local Host)</h4>
+                        <h4>Drive Mad</h4>
                         <p class="creator">by Martin Magni</p>
-                        <div class="stats">👍 94% • 👤 Local</div>
+                        <div class="stats">👍 94% • 👤 Local Host</div>
                     </div>
                 </div>
 
@@ -82,10 +82,12 @@
             playerView.style.display = 'block';
             gameTitle.innerText = "Playing: " + name;
             
-            // Injects your local repository file without any outside web protocols
+            // Appends a cache destroyer timestamp to force the browser to look inside your repository folders
+            const freshUrl = targetUrl + "?cachebust=" + new Date().getTime();
+            
             container.innerHTML = `
                 <iframe 
-                    src="${targetUrl}" 
+                    src="${freshUrl}" 
                     style="width:100%; height:100%; border:none;" 
                     allowfullscreen
                     allow="autoplay; gamepad; keyboard"
@@ -111,12 +113,10 @@
             document.title = "MONKE PLATFORM - Play & Explore";
         }
 
-        // Listens for the Escape key to instantly launch your Google Docs cover layer
         window.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') activatePanicButton();
         });
 
-        // Search engine filter logic
         const searchBox = document.getElementById('platformSearch');
         searchBox.addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase();
